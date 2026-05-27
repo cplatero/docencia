@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procesado de Señales e Imágenes — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --surface: #fffef9;
+    --ink: #1a1a18;
+    --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e;
+    --accent: #c0392b;
+    --accent-light: #f9e8e6;
+    --gold: #b8860b;
+    --border: #d8d4c8;
+    --teoria: #1a3a5c;
+    --teoria-light: #e8f0f8;
+    --practica: #1a5c2a;
+    --practica-light: #e8f5ec;
+    --trabajo: #5c3a1a;
+    --trabajo-light: #f5ede8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: end;
+  }
+
+  .header-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 50%, var(--teoria) 100%);
+  }
+
+  .course-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  h1 span {
+    color: var(--gold);
+  }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .meta-pill {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .header-badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.8;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* INTRO */
+  .intro-band {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .intro-text p {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.75rem;
+    font-weight: 300;
+  }
+
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+
+  .intro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.9rem 1rem;
+    border-radius: 3px;
+  }
+
+  .stat-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.2rem;
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 0.3rem 0.6rem;
+    border-radius: 2px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .section-num.teoria { background: var(--teoria); }
+  .section-num.practica { background: var(--practica); }
+  .section-num.trabajo { background: var(--trabajo); }
+  .section-num.examen { background: var(--accent); }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* LESSON CARDS */
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  .lesson-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .lesson-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+
+  .card-header {
+    padding: 1rem 1.1rem 0.75rem;
+    border-left: 3px solid var(--teoria);
+  }
+
+  .card-header.practica { border-left-color: var(--practica); }
+  .card-header.trabajo { border-left-color: var(--trabajo); }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    padding: 0 1.1rem 0.5rem;
+    font-weight: 300;
+  }
+
+  /* FILE LIST */
+  .file-list {
+    padding: 0 0.5rem 0.75rem;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 3px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    transition: background 0.15s;
+  }
+
+  .file-item:hover {
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .file-icon {
+    font-size: 0.9rem;
+    width: 1.2rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .file-ext {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 2px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .ext-pdf { background: #fde8e8; color: #c0392b; }
+  .ext-ppt { background: #fef0e0; color: #c0750b; }
+  .ext-m   { background: #e8f5ec; color: #1a5c2a; }
+  .ext-zip { background: #e8eef8; color: #1a3a5c; }
+  .ext-doc { background: #e8f0fe; color: #1a3a8c; }
+
+  /* READING LIST */
+  .reading-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .reading-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+  }
+
+  .reading-item {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.83rem;
+    color: var(--ink-soft);
+    font-weight: 300;
+  }
+
+  .reading-item:last-child { border-bottom: none; }
+
+  .reading-item::before {
+    content: "▸";
+    color: var(--gold);
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+  }
+
+  /* EXAM BOX */
+  .exam-box {
+    background: var(--accent-light);
+    border: 1px solid #e8c4c0;
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .exam-icon { font-size: 2.5rem; }
+
+  .exam-info h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .exam-info p { font-size: 0.83rem; color: var(--ink-soft); font-weight: 300; }
+
+  .exam-info a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--accent);
+    font-size: 0.83rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* NAV PILLS */
+  .nav-pills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .nav-pill {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    transition: background 0.15s;
+  }
+
+  .nav-pill.t { background: var(--teoria-light); color: var(--teoria); }
+  .nav-pill.p { background: var(--practica-light); color: var(--practica); }
+  .nav-pill.w { background: var(--trabajo-light); color: var(--trabajo); }
+  .nav-pill.e { background: var(--accent-light); color: var(--accent); }
+  .nav-pill:hover { opacity: 0.75; }
+
+  @media (max-width: 700px) {
+    .header-inner { grid-template-columns: 1fr; }
+    .intro-inner { grid-template-columns: 1fr; }
+    .lesson-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="course-label">Máster en Ingeniería de Producción — ETSIDI · UPM</div>
+      <h1>Procesado de <span>Señales</span><br>e Imágenes</h1>
+      <div class="header-meta">
+        <span class="meta-pill">MATLAB / OCTAVE</span>
+        <span class="meta-pill">6 LECCIONES</span>
+        <span class="meta-pill">6 PRÁCTICAS</span>
+        <span class="meta-pill">Acceso libre — CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br>blogs.upm.es/carlos-platero
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Este repositorio contiene el <strong>material completo del curso de Procesado de Señales e Imágenes</strong> del Máster en Ingeniería de Producción (ETSIDI-UPM), publicado en acceso abierto.</p>
+      <p>El curso aborda los fundamentos matemáticos y algorítmicos del procesamiento moderno de señales e imágenes: desde la descomposición en bases ortogonales y el procesamiento wavelet, hasta la segmentación por cortes en grafos y el registro no rígido de imágenes médicas. Todo el material práctico está implementado en <strong>MATLAB/Octave</strong>.</p>
+      <p>Licencia: <strong>Creative Commons BY-NC-SA 4.0</strong> — libre para uso académico con atribución.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Lecciones teóricas</div></div>
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Prácticas MATLAB</div></div>
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Trabajos optativos</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Acceso libre</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- NAVEGACIÓN RÁPIDA -->
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill t">→ Teoría</a>
+    <a href="#practicas" class="nav-pill p">→ Prácticas MATLAB</a>
+    <a href="#trabajos" class="nav-pill w">→ Trabajos</a>
+    <a href="#examenes" class="nav-pill e">→ Exámenes</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ TEORÍA -->
+  <div id="teoria" class="section-header">
+    <span class="section-num teoria">Teoría</span>
+    <span class="section-title">Lecciones teóricas</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <!-- LECCIÓN 1 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 01</div>
+        <div class="card-title">Introducción al procesamiento de señales e imágenes. Bases ortogonales, Fourier y Wavelets</div>
+      </div>
+      <div class="card-desc">Descomposición de señales e imágenes en bases ortogonales. Procesamiento de Fourier y wavelet. Introducción al análisis de imágenes médicas.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap1/ObjMPI_PSI14.ppt"><span class="file-icon">📊</span>Objetivos y presentación del curso<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap1/ProcesamientoLineal.ppt"><span class="file-icon">📊</span>Procesamiento lineal de señales<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap1/convolFourierContinua.ppt"><span class="file-icon">📊</span>Convolución y Fourier continua<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap1/capIntroWavelets.ppt"><span class="file-icon">📊</span>Introducción a Wavelets<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap1/course-signal-orthobases.pdf"><span class="file-icon">📄</span>Bases ortonormales (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap1/course-signal-wavelets.pdf"><span class="file-icon">📄</span>Wavelets (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap1/cuestionesPSI_1.ppt"><span class="file-icon">❓</span>Cuestiones tema 1<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap1/IntroPSI.zip"><span class="file-icon">📦</span>Material introductorio (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <!-- LECCIÓN 2 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 02</div>
+        <div class="card-title">Aproximación y eliminación de ruido: métodos clásicos, wavelet y variacional</div>
+      </div>
+      <div class="card-desc">Aproximaciones dispersas. Eliminación de ruido con métodos lineales, wavelets y ecuaciones en derivadas parciales (PDE). Flujos de Sobolev y variación total.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap2/Aproximaci?nImag.ppt"><span class="file-icon">📊</span>Aproximación de imágenes<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/FiltrosGauss.ppt"><span class="file-icon">📊</span>Filtros Gaussianos y denoising lineal<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/capDenoisingWavelets.ppt"><span class="file-icon">📊</span>Eliminación de ruido con Wavelets<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/capVariacional.ppt"><span class="file-icon">📊</span>Métodos variacionales<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/Bordes.ppt"><span class="file-icon">📊</span>Detección de bordes<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/capVAgradDiv.ppt"><span class="file-icon">📊</span>Cálculo variacional: gradiente y divergencia<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap2/course-signal-approximation.pdf"><span class="file-icon">📄</span>Aproximación de señales (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap2/course-signal-denoising.pdf"><span class="file-icon">📄</span>Denoising (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap2/cuestionesPSI_2.ppt"><span class="file-icon">❓</span>Cuestiones tema 2<span class="file-ext ext-ppt">PPT</span></a>
+      </div>
+    </div>
+
+    <!-- LECCIÓN 3 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 03</div>
+        <div class="card-title">Optimización numérica. Problema inverso variacional y disperso</div>
+      </div>
+      <div class="card-desc">Métodos de optimización numérica. Problema inverso: formulación variacional y dispersa. Descomposición textura + cartoon.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap3/ProbOptimizacion.pptx"><span class="file-icon">📊</span>Problemas de optimización<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap3/Stanford09_optimization.ppt"><span class="file-icon">📊</span>Optimización (Stanford 2009)<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap3/course-signal-inverse-pbm-variational.pdf"><span class="file-icon">📄</span>Problema inverso variacional (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap3/course-signal-inverse-pbm-sparse.pdf"><span class="file-icon">📄</span>Problema inverso disperso (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap3/cuestionesPSI_3.ppt"><span class="file-icon">❓</span>Cuestiones tema 3<span class="file-ext ext-ppt">PPT</span></a>
+      </div>
+    </div>
+
+    <!-- LECCIÓN 4 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 04</div>
+        <div class="card-title">Geometría diferencial. Contornos activos</div>
+      </div>
+      <div class="card-desc">Geometría diferencial de curvas y superficies. Contornos activos paramétricos (snakes). Contornos geodésicos (Caselles-Frangi). Modelo de Chan-Vese. Level sets.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap4/capGeometriaDiferencial.ppt"><span class="file-icon">📊</span>Geometría diferencial<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap4/Chan_Vese.ppt"><span class="file-icon">📊</span>Modelo de Chan-Vese<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap4/Stanford09_geometry.ppt"><span class="file-icon">📊</span>Geometría I (Stanford 2009)<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap4/Stanford09_geometry2.ppt"><span class="file-icon">📊</span>Geometría II (Stanford 2009)<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap4/Evolucion_curvas.pdf"><span class="file-icon">📄</span>Evolución de curvas planas<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap4/ChanVese01.pdf"><span class="file-icon">📄</span>Chan & Vese (2001) — artículo original<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap4/Vicent Caselles Costa y Alejandro Frangi Caregnato.pdf"><span class="file-icon">📄</span>Caselles & Frangi — contornos geodésicos<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap4/course-mesh-active-contours.pdf"><span class="file-icon">📄</span>Contornos activos (Peyré)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap4/cuestionesPSI_4.ppt"><span class="file-icon">❓</span>Cuestiones tema 4<span class="file-ext ext-ppt">PPT</span></a>
+      </div>
+    </div>
+
+    <!-- LECCIÓN 5 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 05</div>
+        <div class="card-title">Registro de imágenes. Segmentación basada en atlas</div>
+      </div>
+      <div class="card-desc">Métodos de registro rígido y no rígido de imágenes médicas (FAIR, Elastix, Demons). Segmentación multi-atlas del hipocampo y estructuras cerebrales subcorticales.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap5/Image Registration.ppt"><span class="file-icon">📊</span>Registro de imágenes<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap5/MultiAtlasSegm.ppt"><span class="file-icon">📊</span>Segmentación multi-atlas<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap5/HippocampalSegmentationMay14.pptx"><span class="file-icon">📊</span>Segmentación del hipocampo (2014)<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap5/Aljabar.pdf"><span class="file-icon">📄</span>Aljabar et al. — Multi-atlas segmentation<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap5/rohlfing_etal_2005_preprint_chapter_handbook_med_imaging.pdf"><span class="file-icon">📄</span>Rohlfing et al. — Atlas-based segmentation<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap5/Jafari.pdf"><span class="file-icon">📄</span>Jafari et al. — referencia adicional<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap5/Elastix.pdf"><span class="file-icon">📄</span>Elastix — manual de registro<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <!-- LECCIÓN 6 -->
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">LECCIÓN 06</div>
+        <div class="card-title">Segmentación por cortes en grafos (Graph Cuts)</div>
+      </div>
+      <div class="card-desc">Etiquetado de imágenes mediante cortes mínimos en grafos. Algoritmo de Greig-Porteous-Seheult. Cortes interactivos de Boykov-Jolly. Geodesic graph cuts (Boykov-Kolmogorov).</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap6/GraphCuts_AdvancedVision_Spr2010.ppt"><span class="file-icon">📊</span>Graph Cuts — Advanced Vision 2010<span class="file-ext ext-ppt">PPT</span></a>
+        <a class="file-item" href="material/teoria/cap6/Greig89.pdf"><span class="file-icon">📄</span>Greig, Porteous & Seheult (1989)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap6/testGreig.m"><span class="file-icon">🔬</span>testGreig.m — implementación MATLAB<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/teoria/cap6/maxflow.m"><span class="file-icon">🔬</span>maxflow.m — flujo máximo<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/teoria/cap6/testGreig.zip"><span class="file-icon">📦</span>Código completo Greig (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+  </div><!-- /lesson-grid teoria -->
+
+  <!-- ════════════════════════════════════════ LECTURAS RECOMENDADAS -->
+  <div style="margin: 1.5rem 0;">
+    <div class="reading-list">
+      <div class="reading-title">📚 Bibliografía principal del curso</div>
+      <div class="reading-item">Peyré, G. — <em>Advanced Signal, Image and Surface Processing</em> (caps. 1–7). Material de los cursos disponible en la carpeta de teoría.</div>
+      <div class="reading-item">Bronstein, M., Bruna, J., LeCun, Y., Szlam, A., Vandergheynst, P. — <em>Numerical Geometry of Non-Rigid Shapes</em>, caps. 2 y 5.</div>
+      <div class="reading-item">Modersitzki, J. — <em>Flexible Algorithms for Image Registration</em>. SIAM, 2009. (Librería FAIR incluida en Práctica 5)</div>
+      <div class="reading-item">Chan, T.F. & Vese, L.A. — Active contours without edges. <em>IEEE Transactions on Image Processing</em>, 2001.</div>
+      <div class="reading-item">Boykov, Y. & Jolly, M. — Interactive graph cuts for optimal boundary and region segmentation. <em>ICCV</em>, 2001.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ PRÁCTICAS -->
+  <div id="practicas" class="section-header">
+    <span class="section-num practica">Prácticas</span>
+    <span class="section-title">Prácticas MATLAB / Octave</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <!-- PR1 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 01</div>
+        <div class="card-title">Introducción al procesamiento disperso de imágenes</div>
+      </div>
+      <div class="card-desc">Wavelets de Haar 1D, 2D y 3D. Transformadas discretas de coseno. Introducción al procesamiento de imágenes médicas en MATLAB.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr1/prac1MIP_Procesado.pdf"><span class="file-icon">📄</span>Guión de la práctica 1<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr1/Haar1DWavelets.m"><span class="file-icon">🔬</span>Haar1DWavelets.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr1/Haar2DWavelets.m"><span class="file-icon">🔬</span>Haar2DWavelets.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr1/Haar3DWavelets.m"><span class="file-icon">🔬</span>Haar3DWavelets.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr1/Exe_Haar2DWavelets.m"><span class="file-icon">🔬</span>Exe_Haar2DWavelets.m — ejercicios<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr1/IntroductionImageProcessing.m"><span class="file-icon">🔬</span>IntroductionImageProcessing.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr1/toolbox_general.zip"><span class="file-icon">📦</span>Toolbox general (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr1/webPeyre_Pr1.zip"><span class="file-icon">📦</span>Material web Peyré Pr1 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <!-- PR2 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 02</div>
+        <div class="card-title">Eliminación de ruido en señales e imágenes</div>
+      </div>
+      <div class="card-desc">Métodos lineales, wavelets y flujos de Sobolev/TV para eliminación de ruido. Comparativa de técnicas clásicas y modernas.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr2/prac2PSI_AppDenVar.pdf"><span class="file-icon">📄</span>Guión de la práctica 2<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr2/DenoisingLinearMethod.m"><span class="file-icon">🔬</span>DenoisingLinearMethod.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/ImageDenoisingWavelets.m"><span class="file-icon">🔬</span>ImageDenoisingWavelets.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/SobolevTV_flow.m"><span class="file-icon">🔬</span>SobolevTV_flow.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/Exe_DenoisingLinearMethod.m"><span class="file-icon">🔬</span>Exe_DenoisingLinearMethod.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/Exe_ImageDenoisingWavelets.m"><span class="file-icon">🔬</span>Exe_ImageDenoisingWavelets.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/Exe_SobolevTV_flow.m"><span class="file-icon">🔬</span>Exe_SobolevTV_flow.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr2/materialPr2PSI.zip"><span class="file-icon">📦</span>Material completo Pr2 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <!-- PR3 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 03</div>
+        <div class="card-title">Problemas inversos: deconvolución variacional y dispersa</div>
+      </div>
+      <div class="card-desc">Métodos de descenso de gradiente. Deconvolución de imágenes mediante regularización variacional (TV) y dispersa (L1). Problemas inversos en imagen médica.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr3/prac3PSI_ProblemaInverso.pdf"><span class="file-icon">📄</span>Guión de la práctica 3<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr3/GradientDescent.m"><span class="file-icon">🔬</span>GradientDescent.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr3/DeconvVariational.m"><span class="file-icon">🔬</span>DeconvVariational.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr3/DeconvSparse.m"><span class="file-icon">🔬</span>DeconvSparse.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr3/DenoiseRegularizationSobolevTV.m"><span class="file-icon">🔬</span>DenoiseRegularizationSobolevTV.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr3/TV_regularization.m"><span class="file-icon">🔬</span>TV_regularization.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr3/MaterialPr3PSI.zip"><span class="file-icon">📦</span>Material completo Pr3 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <!-- PR4 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 04</div>
+        <div class="card-title">Contornos activos</div>
+      </div>
+      <div class="card-desc">Implementación de contornos activos paramétricos (snakes) y basados en level sets en MATLAB. Segmentación de imágenes médicas 2D.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr4/prac4PSI_ContornosActivos.pdf"><span class="file-icon">📄</span>Guión de la práctica 4<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr4/ActiveContourParametric.m"><span class="file-icon">🔬</span>ActiveContourParametric.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr4/ActiveContourLevelSet.m"><span class="file-icon">🔬</span>ActiveContourLevelSet.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr4/CV01.pdf"><span class="file-icon">📄</span>Chan-Vese (2001) — artículo<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr4/MaterialPr4PSI.zip"><span class="file-icon">📦</span>Material completo Pr4 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr4/ContornosActivos.zip"><span class="file-icon">📦</span>Código contornos activos (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <!-- PR5 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 05</div>
+        <div class="card-title">Registro de imágenes médicas</div>
+      </div>
+      <div class="card-desc">Registro afín y no rígido de imágenes médicas (MRI, PET-CT). Librería FAIR (Flexible Algorithms for Image Registration). Algoritmo Demons. Elastix. Registro multi-atlas del hipocampo.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr5/prac5PSI_Registro.pdf"><span class="file-icon">📄</span>Guión de la práctica 5<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr5/FAIR-color-hyperlinkedsm.pdf"><span class="file-icon">📄</span>Manual FAIR (Modersitzki)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr5/FAIR.zip"><span class="file-icon">📦</span>Librería FAIR completa (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr5/demon_registration_version_8f.zip"><span class="file-icon">📦</span>Algoritmo Demons v8f (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr5/RegNR.zip"><span class="file-icon">📦</span>Registro no rígido con Elastix (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr5/prRegImg.zip"><span class="file-icon">📦</span>Prácticas registro imágenes (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr5/Kroon_Paper_Boston.pdf"><span class="file-icon">📄</span>Kroon — Demons registration (paper)<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <!-- PR6 -->
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 06</div>
+        <div class="card-title">Segmentación por cortes en grafos</div>
+      </div>
+      <div class="card-desc">Implementación del algoritmo de Greig y del método interactivo de Boykov-Jolly para segmentación óptima de imágenes mediante cortes en grafos.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr6/prac6PSI_CortesEnGrafo.pdf"><span class="file-icon">📄</span>Guión de la práctica 6<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/Greig89.pdf"><span class="file-icon">📄</span>Greig, Porteous & Seheult (1989)<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/Graphcut_boykov-iccv-01.pdf"><span class="file-icon">📄</span>Boykov & Jolly — ICCV 2001<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/BK-ICCV03.pdf"><span class="file-icon">📄</span>Boykov & Kolmogorov — ICCV 2003<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/KB-ICCV05.pdf"><span class="file-icon">📄</span>Kolmogorov & Boykov — ICCV 2005<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/demoGeoCut.m"><span class="file-icon">🔬</span>demoGeoCut.m — demo Boykov<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr6/graph2DBoykov.m"><span class="file-icon">🔬</span>graph2DBoykov.m<span class="file-ext ext-m">M</span></a>
+        <a class="file-item" href="material/practicas/pr6/fuentesPr6PSI.zip"><span class="file-icon">📦</span>Código completo Pr6 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+  </div><!-- /lesson-grid practicas -->
+
+  <!-- ═══════════════════════════════════════════════ TRABAJOS -->
+  <div id="trabajos" class="section-header">
+    <span class="section-num trabajo">Trabajos</span>
+    <span class="section-title">Trabajos optativos</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header trabajo">
+        <div class="card-num">TRABAJO 01</div>
+        <div class="card-title">Filtrado de imágenes con difusión no lineal</div>
+      </div>
+      <div class="card-desc">Implementación y análisis de filtros de difusión no lineal (Perona-Malik y variantes) para el suavizado selectivo de imágenes preservando bordes.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr5/demonThirion.m"><span class="file-icon">🔬</span>demonThirion.m — referencia<span class="file-ext ext-m">M</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header trabajo">
+        <div class="card-num">TRABAJO 02</div>
+        <div class="card-title">Descomposición de imágenes en cartoon + textura</div>
+      </div>
+      <div class="card-desc">Separación de una imagen en su componente estructural (cartoon) y su componente textural mediante modelos variacionales (Meyer, Vese-Osher).</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap3/course-signal-inverse-pbm-variational.pdf"><span class="file-icon">📄</span>Material base — problema inverso variacional<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ EXÁMENES -->
+  <div id="examenes" class="section-header">
+    <span class="section-num examen">Exámenes</span>
+    <span class="section-title">Material de evaluación</span>
+  </div>
+
+  <div class="exam-box">
+    <div class="exam-icon">📝</div>
+    <div class="exam-info">
+      <h3>Examen de Junio 2011</h3>
+      <p>Examen final de la convocatoria de junio de 2011. Cubre los contenidos de las seis lecciones teóricas y las prácticas MATLAB correspondientes.</p>
+      <p style="margin-top:0.4rem; font-style:italic; font-size:0.78rem; color: var(--ink-faint);">Nota: el fichero del examen debe añadirse al repositorio en material/examenes/examen_junio2011.pdf</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp; Licencia: CC BY-NC-SA 4.0
+    &nbsp;·&nbsp; Repositorio: GitHub Pages
+  </p>
+</footer>
+
+</body>
+</html>

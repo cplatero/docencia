@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursos Docentes — Carlos Platero Dueñas · UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --surface: #fffef9;
+    --ink: #1a1a18;
+    --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e;
+    --accent: #c0392b;
+    --accent-light: #f9e8e6;
+    --gold: #b8860b;
+    --border: #d8d4c8;
+    --master: #1a3a5c;
+    --master-light: #e8f0f8;
+    --grado: #1a5c2a;
+    --grado-light: #e8f5ec;
+    --seminario: #5c3a1a;
+    --seminario-light: #f5ede8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* STRIPE */
+  .header-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 50%, var(--master) 100%);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: end;
+  }
+
+  .site-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  h1 em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .header-desc {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  .header-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .header-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .header-link:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .profile-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    text-align: right;
+    min-width: 200px;
+  }
+
+  .profile-name {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .profile-role {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.3rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .profile-role strong {
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .stat-n {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .stat-l {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-sep {
+    width: 1px;
+    height: 2rem;
+    background: var(--border);
+  }
+
+  .open-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--grado);
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--grado-light);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2px;
+    border: 1px solid #b8d8c0;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* SECTION HEADERS */
+  .section-hd {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    padding: 0.28rem 0.6rem;
+    border-radius: 2px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .tag-master    { background: var(--master); }
+  .tag-grado     { background: var(--grado); }
+  .tag-seminario { background: var(--seminario); }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* COURSE GRID */
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* COURSE CARD */
+  .course-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+  }
+
+  .course-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+    transform: translateY(-2px);
+  }
+
+  .card-accent-bar {
+    height: 3px;
+    background: var(--master);
+  }
+
+  .card-accent-bar.grado     { background: var(--grado); }
+  .card-accent-bar.seminario { background: var(--seminario); }
+
+  .card-body {
+    padding: 1.25rem 1.35rem 1rem;
+    flex: 1;
+  }
+
+  .card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-weight: 300;
+    line-height: 1.55;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0 1.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag-pill {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--ink-faint);
+    border: 1px solid var(--border);
+  }
+
+  .card-footer {
+    padding: 0.75rem 1.35rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card-stat {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .card-cta {
+    font-size: 0.75rem;
+    color: var(--master);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .card-cta.grado     { color: var(--grado); }
+  .card-cta.seminario { color: var(--seminario); }
+
+  /* COMING SOON CARD */
+  .course-card.coming {
+    opacity: 0.55;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .coming-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--gold);
+    color: #fff;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0 0;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .info-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  .info-text h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .info-text p {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .info-text a {
+    color: var(--master);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.8;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .header-inner { grid-template-columns: 1fr; }
+    .profile-box { text-align: left; }
+    .stats-inner { gap: 1rem; }
+    .open-badge { margin-left: 0; }
+    .course-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="site-label">Universidad Politécnica de Madrid · ETSIDI · Recursos Docentes</div>
+      <h1>Material Docente<br><em>en Acceso Abierto</em></h1>
+      <p class="header-desc">
+        Colección de cursos, apuntes, prácticas y recursos educativos del área de 
+        Electrónica, Automática, Visión Artificial e Ingeniería Biomédica, 
+        publicados libremente para uso académico.
+      </p>
+      <div class="header-links">
+        <a href="https://blogs.upm.es/carlos-platero" class="header-link">↗ Blog UPM</a>
+        <a href="https://blogs.upm.es/carlos-platero/docencia/" class="header-link">↗ Docencia</a>
+        <a href="https://blogs.upm.es/carlos-platero/software/" class="header-link">↗ Software</a>
+        <a href="https://github.com/cplatero" class="header-link">↗ GitHub</a>
+        <a href="https://oa.upm.es" class="header-link">↗ OA-UPM</a>
+      </div>
+    </div>
+    <div class="profile-box">
+      <div class="profile-name">Carlos Platero Dueñas</div>
+      <div class="profile-role">
+        <strong>Catedrático de Universidad</strong>
+        Dep. Ingeniería Eléctrica,<br>
+        Electrónica, Automática<br>
+        y Física Aplicada<br>
+        ETSIDI · UPM
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-n">6</span>
+      <span class="stat-l">Cursos</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-n">6</span>
+      <span class="stat-l">Libros docentes</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-n">33+</span>
+      <span class="stat-l">Años de docencia</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <span class="stat-n">140+</span>
+      <span class="stat-l">TFG/PFC dirigidos</span>
+    </div>
+    <div class="open-badge">✦ Acceso abierto · CC BY-NC-SA 4.0</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ═══════════ MÁSTER -->
+  <div class="section-hd">
+    <span class="section-tag tag-master">Máster</span>
+    <span class="section-title">Asignaturas de Máster</span>
+  </div>
+
+  <div class="course-grid">
+
+    <!-- PSI — ACTIVO -->
+    <a href="procesado-senales-imagenes/index.html" class="course-card">
+      <div class="card-accent-bar"></div>
+      <div class="card-body">
+        <div class="card-meta">Máster en Ingeniería de Producción · ETSIDI-UPM</div>
+        <div class="card-title">Procesado de Señales e Imágenes</div>
+        <div class="card-desc">
+          Bases ortogonales, wavelets, optimización numérica, problema inverso, 
+          contornos activos, registro de imágenes médicas y segmentación por cortes en grafos.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">MATLAB</span>
+        <span class="tag-pill">Wavelets</span>
+        <span class="tag-pill">Level Sets</span>
+        <span class="tag-pill">Graph Cuts</span>
+        <span class="tag-pill">Registro MRI</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats">
+          <span class="card-stat">6 lecciones</span>
+          <span class="card-stat">6 prácticas</span>
+        </div>
+        <span class="card-cta">Ver curso →</span>
+      </div>
+    </a>
+
+    <!-- Visión Artificial — PRÓXIMO -->
+    <div class="course-card coming">
+      <div class="card-accent-bar"></div>
+      <div class="card-body">
+        <div class="card-meta">Máster en Ingeniería de Producción · ETSIDI-UPM</div>
+        <div class="card-title">Visión Artificial</div>
+        <div class="card-desc">
+          Fundamentos de visión por computador, geometría proyectiva, calibración de cámaras, 
+          reconocimiento de patrones y aplicaciones en inspección industrial y análisis biomédico.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">MATLAB</span>
+        <span class="tag-pill">Computer Vision</span>
+        <span class="tag-pill">3D</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats"><span class="card-stat">Próximamente</span></div>
+        <span class="card-cta">—</span>
+      </div>
+      <span class="coming-badge">PRÓXIMO</span>
+    </div>
+
+    <!-- PSI Máster Biomédica — PRÓXIMO -->
+    <div class="course-card coming">
+      <div class="card-accent-bar"></div>
+      <div class="card-body">
+        <div class="card-meta">Máster en Ingeniería Biomédica · ETSIDI-UPM</div>
+        <div class="card-title">Procesado de Señales e Imágenes Biomédicas</div>
+        <div class="card-desc">
+          Procesamiento avanzado de imágenes de resonancia magnética. 
+          Segmentación multi-atlas. Modelos computacionales de enfermedades neurodegenerativas.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">MRI</span>
+        <span class="tag-pill">Neuroimagen</span>
+        <span class="tag-pill">MATLAB/Python</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats"><span class="card-stat">Próximamente</span></div>
+        <span class="card-cta">—</span>
+      </div>
+      <span class="coming-badge">PRÓXIMO</span>
+    </div>
+
+  </div>
+
+  <!-- ═══════════ GRADO -->
+  <div class="section-hd">
+    <span class="section-tag tag-grado">Grado</span>
+    <span class="section-title">Asignaturas de Grado</span>
+  </div>
+
+  <div class="course-grid">
+
+    <!-- Regulación Automática — PRÓXIMO -->
+    <div class="course-card coming">
+      <div class="card-accent-bar grado"></div>
+      <div class="card-body">
+        <div class="card-meta">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI-UPM</div>
+        <div class="card-title">Regulación Automática</div>
+        <div class="card-desc">
+          Modelado y análisis de sistemas dinámicos. Diseño de controladores en tiempo continuo 
+          y discreto. Prácticas renovadas con Arduino y MATLAB/Simulink sin instrumentos de laboratorio.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">MATLAB/Simulink</span>
+        <span class="tag-pill">Arduino</span>
+        <span class="tag-pill">Control</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats"><span class="card-stat">Próximamente</span></div>
+        <span class="card-cta grado">—</span>
+      </div>
+      <span class="coming-badge">PRÓXIMO</span>
+    </div>
+
+    <!-- SII — PRÓXIMO -->
+    <div class="course-card coming">
+      <div class="card-accent-bar grado"></div>
+      <div class="card-body">
+        <div class="card-meta">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI-UPM</div>
+        <div class="card-title">Sistemas Informáticos Industriales</div>
+        <div class="card-desc">
+          Programación orientada a objetos aplicada a sistemas de control. 
+          Análisis y diseño con UML. Aplicaciones gráficas interactivas.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">C++</span>
+        <span class="tag-pill">UML</span>
+        <span class="tag-pill">OOP</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats"><span class="card-stat">Próximamente</span></div>
+        <span class="card-cta grado">—</span>
+      </div>
+      <span class="coming-badge">PRÓXIMO</span>
+    </div>
+
+    <!-- Automática — PRÓXIMO -->
+    <div class="course-card coming">
+      <div class="card-accent-bar grado"></div>
+      <div class="card-body">
+        <div class="card-meta">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI-UPM</div>
+        <div class="card-title">Automática y Robótica</div>
+        <div class="card-desc">
+          Fundamentos de control automático y robótica industrial. 
+          Cinemática de robots, planificación de trayectorias y control de movimiento.
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">MATLAB</span>
+        <span class="tag-pill">Robótica</span>
+        <span class="tag-pill">Control</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats"><span class="card-stat">Próximamente</span></div>
+        <span class="card-cta grado">—</span>
+      </div>
+      <span class="coming-badge">PRÓXIMO</span>
+    </div>
+
+  </div>
+
+  <!-- INFO BOX -->
+  <div class="info-box">
+    <div class="info-icon">ℹ️</div>
+    <div class="info-text">
+      <h3>Sobre este repositorio</h3>
+      <p>
+        Todo el material está publicado bajo licencia <strong>Creative Commons BY-NC-SA 4.0</strong>: 
+        libre para uso académico y docente con atribución al autor. 
+        Los cursos se irán añadiendo progresivamente. Para más información sobre investigación, 
+        tutorización de TFG/TFM y software científico, visite 
+        <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>.
+        Repositorio GitHub: <a href="https://github.com/cplatero/docencia">github.com/cplatero/docencia</a>.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p>
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/cplatero/docencia">github.com/cplatero/docencia</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>
