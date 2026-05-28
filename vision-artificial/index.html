@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visión Artificial — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --surface: #fffef9;
+    --ink: #1a1a18;
+    --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e;
+    --accent: #c0392b;
+    --accent-light: #f9e8e6;
+    --gold: #b8860b;
+    --border: #d8d4c8;
+    --teoria: #1a3a5c;
+    --teoria-light: #e8f0f8;
+    --practica: #1a5c2a;
+    --practica-light: #e8f5ec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+  .header-stripe { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 50%, var(--teoria) 100%); }
+  header { background: var(--ink); color: #fff; }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+  .course-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  h1 { font-family: 'Source Serif 4', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.15; color: #fff; }
+  h1 span { color: var(--gold); }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+  .meta-pill { font-size: 0.78rem; padding: 0.3rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; color: rgba(255,255,255,0.75); font-family: 'JetBrains Mono', monospace; }
+  .header-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.05em; text-align: center; line-height: 1.9; border-radius: 2px; white-space: nowrap; }
+  .header-badge a { color: var(--gold); text-decoration: none; }
+  .intro-band { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start; }
+  .intro-text p { font-size: 1rem; color: var(--ink-soft); margin-bottom: 0.75rem; font-weight: 300; }
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+  .intro-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 3px; }
+  .stat-num { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .nav-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+  .nav-pill { font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 2px; text-decoration: none; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; transition: opacity 0.15s; }
+  .nav-pill.t { background: var(--teoria-light); color: var(--teoria); }
+  .nav-pill.p { background: var(--practica-light); color: var(--practica); }
+  .nav-pill.b { background: #f5ede8; color: #5c3a1a; }
+  .nav-pill:hover { opacity: 0.7; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+  .section-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.3rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .section-num.teoria { background: var(--teoria); }
+  .section-num.practica { background: var(--practica); }
+  .section-num.libro { background: var(--gold); }
+  .section-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; color: var(--ink); }
+  .lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .lesson-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .card-header { padding: 1rem 1.1rem 0.75rem; border-left: 3px solid var(--teoria); }
+  .card-header.practica { border-left-color: var(--practica); }
+  .card-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .card-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+  .card-desc { font-size: 0.82rem; color: var(--ink-soft); padding: 0 1.1rem 0.5rem; font-weight: 300; }
+  .file-list { padding: 0 0.5rem 0.75rem; }
+  .file-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; border-radius: 3px; text-decoration: none; color: var(--ink-soft); font-size: 0.82rem; transition: background 0.15s; }
+  .file-item:hover { background: var(--bg); color: var(--ink); }
+  .file-icon { font-size: 0.9rem; width: 1.2rem; text-align: center; flex-shrink: 0; }
+  .file-ext { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+  .ext-pdf { background: #fde8e8; color: #c0392b; }
+  .ext-zip { background: #e8eef8; color: #1a3a5c; }
+  .ext-jpg { background: #fef5e0; color: #8a6000; }
+  .book-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+  .book-icon { font-size: 2rem; flex-shrink: 0; }
+  .book-info h3 { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; }
+  .book-info p { font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; line-height: 1.6; }
+  .book-info .isbn { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); margin-top: 0.5rem; }
+  .book-info a { color: var(--teoria); font-size: 0.8rem; text-decoration: none; border-bottom: 1px solid currentColor; }
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+  footer a { color: var(--gold); text-decoration: none; }
+  @media (max-width: 700px) { .header-inner { grid-template-columns: 1fr; } .intro-inner { grid-template-columns: 1fr; } .lesson-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="breadcrumb"><a href="../index.html">← Recursos Docentes</a> / Visión Artificial</div>
+      <div class="course-label">Máster en Ingeniería de Producción y Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI · UPM</div>
+      <h1>Visión <span>Artificial</span></h1>
+      <div class="header-meta">
+        <span class="meta-pill">MATLAB</span>
+        <span class="meta-pill">7 CAPÍTULOS</span>
+        <span class="meta-pill">6 PRÁCTICAS</span>
+        <span class="meta-pill">Acceso libre — CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br><a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Material completo del curso de <strong>Visión Artificial</strong> del Grado en Ingeniería Electrónica Industrial y Automática (ETSIDI-UPM), publicado en acceso abierto.</p>
+      <p>El curso aborda los fundamentos de los sistemas de visión por computador: desde la formación y digitalización de imágenes hasta la interpretación automática de escenas, pasando por el preprocesado, la segmentación y el procesamiento morfológico. Las prácticas están implementadas en <strong>MATLAB</strong> e incluyen la adquisición de imágenes con cámara real, la calibración métrica y la segmentación de objetos.</p>
+      <p>El material teórico corresponde al libro <strong>"Apuntes de Visión Artificial"</strong> (Fundación General UPM, 2007, ISBN 978-84-96737-16-7), disponible aquí en su última versión actualizada. Licencia: <strong>CC BY-NC-SA 4.0</strong>.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">Capítulos teoría</div></div>
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Prácticas MATLAB</div></div>
+      <div class="stat-box"><div class="stat-num">190</div><div class="stat-label">Páginas de apuntes</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Acceso libre</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill t">→ Apuntes teóricos</a>
+    <a href="#practicas" class="nav-pill p">→ Prácticas MATLAB</a>
+    <a href="#libro" class="nav-pill b">→ Libro de referencia</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════ TEORÍA -->
+  <div id="teoria" class="section-header">
+    <span class="section-num teoria">Teoría</span>
+    <span class="section-title">Apuntes por capítulos</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 01</div>
+        <div class="card-title">Introducción a la Visión Artificial</div>
+      </div>
+      <div class="card-desc">Definición y objetivos de la visión artificial. Aplicaciones industriales y biomédicas. Arquitectura de un sistema de visión. Etapas del procesamiento visual.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap1_IntroVA_v1.9.pdf"><span class="file-icon">📄</span>cap1 — Introducción a la Visión Artificial<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 02</div>
+        <div class="card-title">Formación de imágenes</div>
+      </div>
+      <div class="card-desc">Óptica geométrica. Modelos de cámara (perspectiva, afín). Digitalización: muestreo y cuantificación. Sensores CCD y CMOS. Geometría proyectiva.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap2_FormImg_v1.9b.pdf"><span class="file-icon">📄</span>cap2 — Formación de imágenes<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 03</div>
+        <div class="card-title">Procesamiento digital de imágenes</div>
+      </div>
+      <div class="card-desc">Representación digital. Histograma y transformaciones de nivel de gris. Ecualización. Operaciones aritméticas y lógicas entre imágenes. Transformada de Fourier 2D.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap3_IntroProv1.9.pdf"><span class="file-icon">📄</span>cap3 — Procesamiento digital de imágenes<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 04</div>
+        <div class="card-title">Técnicas de preprocesado</div>
+      </div>
+      <div class="card-desc">Filtrado espacial lineal y no lineal. Eliminación de ruido: mediana, gaussiano, bilateral. Realce de bordes. Detección de bordes: Sobel, Prewitt, Canny. Filtrado en frecuencia.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap4Preprocesadov1.9.pdf"><span class="file-icon">📄</span>cap4 — Técnicas de preprocesado<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 05</div>
+        <div class="card-title">Segmentación</div>
+      </div>
+      <div class="card-desc">Umbralización global y adaptativa (Otsu). Segmentación por regiones: crecimiento, división y fusión. Detección de bordes como contornos. Transformada de Hough para líneas y círculos.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap5Segmentacionv1.9.pdf"><span class="file-icon">📄</span>cap5 — Segmentación<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 06</div>
+        <div class="card-title">Procesamiento morfológico</div>
+      </div>
+      <div class="card-desc">Morfología matemática binaria y en escala de grises. Erosión, dilatación, apertura y cierre. Esqueletización. Reconstrucción morfológica. Aplicaciones en post-procesado de segmentaciones.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap6Morfolog%3Fav1.9.pdf"><span class="file-icon">📄</span>cap6 — Procesamiento morfológico<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 07</div>
+        <div class="card-title">Interpretación automática de imágenes</div>
+      </div>
+      <div class="card-desc">Extracción de características de regiones: área, perímetro, momentos, excentricidad. Descriptores de Fourier. Clasificación de objetos. Reconocimiento de patrones. Aplicaciones de inspección industrial.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap7IntrepImagv1.9.pdf"><span class="file-icon">📄</span>cap7 — Interpretación automática de imágenes<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ PRÁCTICAS -->
+  <div id="practicas" class="section-header">
+    <span class="section-num practica">Prácticas</span>
+    <span class="section-title">Prácticas de laboratorio con MATLAB</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 01</div>
+        <div class="card-title">Iniciación al procesamiento de imágenes con MATLAB</div>
+      </div>
+      <div class="card-desc">Introducción al Image Processing Toolbox de MATLAB. Lectura, visualización y operaciones básicas sobre imágenes. Histograma y transformaciones de nivel de gris.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr1/prac1VA_%20MIP.pdf"><span class="file-icon">📄</span>Guión de la práctica 1<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 02</div>
+        <div class="card-title">Adquisición de imágenes y entornos gráficos</div>
+      </div>
+      <div class="card-desc">Captura de imágenes desde cámara con MATLAB. Desarrollo de interfaces gráficas (GUIDE) para sistemas de visión. Parámetros de adquisición: resolución, ganancia, exposición.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr2/prac2VA_Adquisicion.pdf"><span class="file-icon">📄</span>Guión de la práctica 2<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr2/Pr2MIPVA_GUIDE.zip"><span class="file-icon">📦</span>Material GUIDE MATLAB (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 03</div>
+        <div class="card-title">Calibración métrica de cámaras</div>
+      </div>
+      <div class="card-desc">Calibración de cámaras de vídeo mediante tablero de ajedrez. Obtención de parámetros intrínsecos y extrínsecos. Corrección de distorsión radial y tangencial. Camera Calibration Toolbox.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr3/prac3VA_Calibraci%3Fn.pdf"><span class="file-icon">📄</span>Guión de la práctica 3<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr3/toolbox_calib.zip"><span class="file-icon">📦</span>Camera Calibration Toolbox (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+        <a class="file-item" href="material/practicas/pr3/TAS5110C1B_Brief_V0.3.pdf"><span class="file-icon">📄</span>Datasheet sensor CMOS TAS5110C1B<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 04</div>
+        <div class="card-title">Técnicas de procesado de imágenes</div>
+      </div>
+      <div class="card-desc">Filtrado espacial en dominio frecuencial (FFT). Filtros paso-bajo, paso-alto y paso-banda. Detección de bordes: Sobel, Prewitt, Laplaciano. Técnicas del dominio transformado.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr4/prac4VA_Procesado.pdf"><span class="file-icon">📄</span>Guión de la práctica 4<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr4/MaterialPr4.zip"><span class="file-icon">📦</span>Material de la práctica 4 (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 05</div>
+        <div class="card-title">Técnicas de preprocesado de imágenes</div>
+      </div>
+      <div class="card-desc">Eliminación de ruido: filtros de media, mediana y gaussiano. Realce de contraste. Filtros morfológicos. Comparativa de técnicas sobre imágenes con distintos tipos de ruido.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr5/prac5VA_PreProcesado.pdf"><span class="file-icon">📄</span>Guión de la práctica 5<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header practica">
+        <div class="card-num">PRÁCTICA 06</div>
+        <div class="card-title">Segmentación de imágenes</div>
+      </div>
+      <div class="card-desc">Umbralización de Otsu. Segmentación por regiones. Transformada de Hough para detección de líneas y círculos. Aplicación a imágenes de inspección industrial y análisis biomédico.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr6/prac6VA_Segmentacion.pdf"><span class="file-icon">📄</span>Guión de la práctica 6<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/practicas/pr6/materialPrSegm.zip"><span class="file-icon">📦</span>Material de segmentación (ZIP)<span class="file-ext ext-zip">ZIP</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOTOS TABLERO CALIBRACIÓN -->
+  <div style="margin: 1.5rem 0 0;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem 1.35rem;">
+      <div style="font-family: 'Source Serif 4', serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem;">📷 Imágenes para calibración (Práctica 3)</div>
+      <div style="font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; margin-bottom: 0.75rem;">
+        Conjunto de imágenes del tablero de ajedrez capturadas a distintas distancias (500, 700, 900 y 1100 mm) para la calibración métrica de la cámara.
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <a class="file-item" href="material/practicas/fotos_tablero/a 500.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>Tablero 500mm<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/a 700.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>Tablero 700mm<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/a 900.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>Tablero 900mm<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/a 1100.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>Tablero 1100mm<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/imagen01.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>imagen01<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/imagen02.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>imagen02<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/imagen03.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>imagen03<span class="file-ext ext-jpg">JPG</span></a>
+        <a class="file-item" href="material/practicas/fotos_tablero/imagen04.jpg" style="text-decoration:none; display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; background:var(--bg); border-radius:3px; font-size:0.8rem; color:var(--ink-soft);"><span>🖼</span>imagen04<span class="file-ext ext-jpg">JPG</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ LIBRO -->
+  <div id="libro" class="section-header">
+    <span class="section-num libro">Libro</span>
+    <span class="section-title">Libro de referencia del curso</span>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📘</div>
+    <div class="book-info">
+      <h3>Apuntes de Visión Artificial</h3>
+      <p>Carlos Platero Dueñas · Fundación General de la Universidad Politécnica de Madrid, 2007 · 190 páginas.</p>
+      <p style="margin-top:0.4rem;">Libro de texto original que cubre los 7 capítulos del curso: introducción, formación de imágenes, procesamiento digital, preprocesado, segmentación, morfología matemática e interpretación automática. Ha sido el texto de referencia del curso durante más de 15 años.</p>
+      <div class="isbn">ISBN: 978-84-96737-16-7 &nbsp;·&nbsp;</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="../index.html">← Volver a Recursos Docentes</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>
