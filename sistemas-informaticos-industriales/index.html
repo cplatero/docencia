@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemas Informáticos Industriales — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb; --surface: #fffef9; --ink: #1a1a18; --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e; --accent: #c0392b; --accent-light: #f9e8e6;
+    --gold: #b8860b; --border: #d8d4c8;
+    --teoria: #1a3a5c; --teoria-light: #e8f0f8;
+    --practica: #1a5c2a; --practica-light: #e8f5ec;
+    --patron: #4a1a5c; --patron-light: #f0e8f8;
+    /* Pattern category colors */
+    --creacional: #1a5c4a; --creacional-light: #e8f5f0;
+    --estructural: #1a3a5c; --estructural-light: #e8f0f8;
+    --comportamiento: #5c3a1a; --comportamiento-light: #f5ede8;
+    --arquitectura: #5c1a1a; --arquitectura-light: #f8e8e8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+  .header-stripe { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 40%, var(--patron) 100%); }
+  header { background: var(--ink); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .course-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  h1 { font-family: 'Source Serif 4', serif; font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 600; line-height: 1.15; color: #fff; }
+  h1 span { color: var(--gold); }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+  .meta-pill { font-size: 0.78rem; padding: 0.3rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; color: rgba(255,255,255,0.75); font-family: 'JetBrains Mono', monospace; }
+  .header-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #fff; text-align: center; line-height: 1.9; border-radius: 2px; white-space: nowrap; }
+  .header-badge a { color: var(--gold); text-decoration: none; }
+  .intro-band { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .intro-text p { font-size: 1rem; color: var(--ink-soft); margin-bottom: 0.75rem; font-weight: 300; }
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+  .intro-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; align-content: start; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 3px; }
+  .stat-num { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .nav-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+  .nav-pill { font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 2px; text-decoration: none; font-family: 'JetBrains Mono', monospace; transition: opacity 0.15s; }
+  .nav-pill.t { background: var(--teoria-light); color: var(--teoria); }
+  .nav-pill.p { background: var(--patron-light); color: var(--patron); }
+  .nav-pill:hover { opacity: 0.7; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.3rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .tag-teoria { background: var(--teoria); }
+  .tag-patron { background: var(--patron); }
+  .section-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; }
+
+  /* THEORY CARDS */
+  .lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .lesson-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .card-header { padding: 1rem 1.1rem 0.75rem; border-left: 3px solid var(--teoria); }
+  .card-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .card-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; }
+  .card-desc { font-size: 0.82rem; color: var(--ink-soft); padding: 0 1.1rem 0.75rem; font-weight: 300; }
+  .file-list { padding: 0 0.5rem 0.75rem; }
+  .file-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; border-radius: 3px; text-decoration: none; color: var(--ink-soft); font-size: 0.82rem; transition: background 0.15s; }
+  .file-item:hover { background: var(--bg); color: var(--ink); }
+  .file-icon { font-size: 0.9rem; width: 1.2rem; text-align: center; flex-shrink: 0; }
+  .file-ext { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+  .ext-pdf { background: #fde8e8; color: #c0392b; }
+  .ext-zip { background: #e8eef8; color: #1a3a5c; }
+
+  /* PATTERN CATEGORY */
+  .cat-header { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 0.9rem; }
+  .cat-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; padding: 0.25rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .cat-creacional  { background: var(--creacional); }
+  .cat-estructural { background: var(--estructural); }
+  .cat-comportamiento { background: var(--comportamiento); }
+  .cat-arquitectura { background: var(--arquitectura); }
+  .cat-title { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; color: var(--ink-soft); }
+
+  /* PATTERN CARDS */
+  .pattern-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.9rem; }
+  .pattern-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.15s, transform 0.15s; }
+  .pattern-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.07); transform: translateY(-1px); }
+  .pat-bar { height: 3px; }
+  .bar-creacional    { background: var(--creacional); }
+  .bar-estructural   { background: var(--estructural); }
+  .bar-comportamiento{ background: var(--comportamiento); }
+  .bar-arquitectura  { background: var(--arquitectura); }
+  .pat-body { padding: 0.9rem 1.1rem 0.5rem; }
+  .pat-category { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .cat-text-creacional    { color: var(--creacional); }
+  .cat-text-estructural   { color: var(--estructural); }
+  .cat-text-comportamiento{ color: var(--comportamiento); }
+  .cat-text-arquitectura  { color: var(--arquitectura); }
+  .pat-name { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.25; margin-bottom: 0.3rem; }
+  .pat-intent { font-size: 0.8rem; color: var(--ink-soft); font-weight: 300; line-height: 1.5; }
+  .pat-example { font-size: 0.75rem; color: var(--ink-faint); font-style: italic; margin-top: 0.3rem; }
+  .pat-footer { padding: 0.6rem 1.1rem 0.75rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); margin-top: 0.5rem; }
+  .pat-files { display: flex; gap: 0.4rem; }
+  .pat-file { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 2px; }
+  .pat-download { text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--patron); display: flex; align-items: center; gap: 0.3rem; }
+  .pat-download:hover { opacity: 0.7; }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+  footer a { color: var(--gold); text-decoration: none; }
+  @media (max-width: 700px) { .header-inner, .intro-inner { grid-template-columns: 1fr; } .lesson-grid, .pattern-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="breadcrumb"><a href="../index.html">← Recursos Docentes</a> / Sistemas Informáticos Industriales</div>
+      <div class="course-label">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI · UPM</div>
+      <h1>Sistemas <span>Informáticos</span><br>Industriales</h1>
+      <div class="header-meta">
+        <span class="meta-pill">C++</span>
+        <span class="meta-pill">UML</span>
+        <span class="meta-pill">CMake</span>
+        <span class="meta-pill">6 CAPÍTULOS</span>
+        <span class="meta-pill">17 PATRONES GoF</span>
+        <span class="meta-pill">CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br><a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Material completo del curso de <strong>Sistemas Informáticos Industriales</strong> del Grado en Ingeniería Electrónica Industrial y Automática (ETSIDI-UPM), publicado en acceso abierto.</p>
+      <p>El curso cubre el desarrollo de software orientado a objetos aplicado a sistemas industriales: desde la captura de requisitos y el análisis con UML hasta el diseño con <strong>patrones de diseño GoF</strong> (Gang of Four). Cada patrón incluye una implementación completa en <strong>C++</strong> con su <strong>CMakeLists.txt</strong>, lista para compilar.</p>
+      <p>El material teórico corresponde al libro <strong>"Apuntes de Informática Industrial: análisis y diseño orientado a objetos"</strong> (Fundación General UPM, 2007, ISBN 978-84-96737-15-0). Licencia: <strong>CC BY-NC-SA 4.0</strong>.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Capítulos teoría</div></div>
+      <div class="stat-box"><div class="stat-num">17</div><div class="stat-label">Patrones GoF</div></div>
+      <div class="stat-box"><div class="stat-num">C++</div><div class="stat-label">Lenguaje</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Acceso libre</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill t">→ Apuntes teóricos</a>
+    <a href="#creacionales" class="nav-pill p">→ Patrones creacionales</a>
+    <a href="#estructurales" class="nav-pill p">→ Patrones estructurales</a>
+    <a href="#comportamiento" class="nav-pill p">→ Patrones de comportamiento</a>
+    <a href="#arquitectura" class="nav-pill p">→ Arquitectura</a>
+  </div>
+
+  <!-- ═══════════════════════════════ TEORÍA -->
+  <div id="teoria" class="section-header">
+    <span class="section-tag tag-teoria">Teoría</span>
+    <span class="section-title">Apuntes por capítulos</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 01</div>
+        <div class="card-title">Introducción a la Ingeniería de la Programación</div>
+      </div>
+      <div class="card-desc">Crisis del software. Proceso Unificado (UP). Ciclo de vida iterativo e incremental. Roles, artefactos y flujos de trabajo. Introducción a UML.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap1_IntroIngSWv1.6b.pdf"><span class="file-icon">📄</span>cap1 — Introducción a la Ingeniería del Software<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 02</div>
+        <div class="card-title">Recogida y documento de requisitos</div>
+      </div>
+      <div class="card-desc">Fase de inicio del Proceso Unificado. Casos de uso. Actores. Relaciones entre casos de uso. Documento de visión. Modelo de negocio.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap2_Requisitosv1.6b.pdf"><span class="file-icon">📄</span>cap2 — Recogida y documento de requisitos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 03</div>
+        <div class="card-title">Análisis orientado a objetos</div>
+      </div>
+      <div class="card-desc">Fase de elaboración. Diagramas de secuencia y colaboración. Identificación de clases de análisis: entidad, control y frontera. Contratos de operación.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap3_AOOv1.6b.pdf"><span class="file-icon">📄</span>cap3 — Análisis orientado a objetos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 04</div>
+        <div class="card-title">UML estructural</div>
+      </div>
+      <div class="card-desc">Diagrama de clases. Relaciones: asociación, agregación, composición, herencia y dependencia. Multiplicidades. Interfaces. Diagramas de componentes y despliegue.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap4_UMLEstaticov1.6b.pdf"><span class="file-icon">📄</span>cap4 — UML estructural<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 05</div>
+        <div class="card-title">UML dinámico y de implementación</div>
+      </div>
+      <div class="card-desc">Diagramas de estado, actividad y tiempo. Diagramas de interacción: secuencia y comunicación. Máquinas de estado de Harel. Paso de análisis a implementación en C++.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap5_UMLDinamicov1.6b.pdf"><span class="file-icon">📄</span>cap5 — UML dinámico y de implementación<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 06</div>
+        <div class="card-title">Diseño orientado a objetos y patrones GoF</div>
+      </div>
+      <div class="card-desc">Principios SOLID. Patrones de diseño GoF (Gamma, Helm, Johnson, Vlissides). Patrones creacionales, estructurales y de comportamiento. Arquitectura por capas y eventos.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/cap6_Dise%3FoParteIv1.6b.pdf"><span class="file-icon">📄</span>cap6 Parte I — Diseño orientado a objetos<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/cap6_Dise%3FoParteIIv1.6b.pdf"><span class="file-icon">📄</span>cap6 Parte II — Patrones de diseño GoF<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ PATRONES -->
+  <div id="creacionales" class="section-header">
+    <span class="section-tag tag-patron">Patrones GoF</span>
+    <span class="section-title">Ejemplos de código C++ con CMake</span>
+  </div>
+
+  <p style="font-size:0.85rem; color:var(--ink-soft); font-weight:300; margin-bottom:1.5rem; max-width:750px;">
+    Cada patrón incluye un ZIP con el código fuente en C++ y su <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; background:var(--bg); padding:0.1rem 0.3rem; border-radius:2px;">CMakeLists.txt</code> listo para compilar con CMake. Para compilar: <code style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; background:var(--bg); padding:0.1rem 0.3rem; border-radius:2px;">mkdir build && cd build && cmake .. && make</code>
+  </p>
+
+  <!-- CREACIONALES -->
+  <div class="cat-header">
+    <span class="cat-tag cat-creacional">Creacionales</span>
+    <span class="cat-title">Controlan la creación de objetos</span>
+  </div>
+  <div class="pattern-grid" id="creacionales-grid">
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-creacional"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-creacional">CREACIONAL</div>
+        <div class="pat-name">Singleton</div>
+        <div class="pat-intent">Garantiza que una clase tiene una única instancia y proporciona un punto de acceso global a ella. Útil para gestores de recursos compartidos (configuración, logs, conexiones).</div>
+        <div class="pat-example">Ejemplo: clase <code>GlobalClass</code> con valor compartido accesible desde cualquier módulo.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">ej_singleton.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Singleton.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-creacional"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-creacional">CREACIONAL</div>
+        <div class="pat-name">Factory Method (Factoría)</div>
+        <div class="pat-intent">Define una interfaz para crear objetos pero delega en las subclases la decisión de qué clase instanciar. Desacopla el código cliente de las clases concretas.</div>
+        <div class="pat-example">Ejemplo: <code>Factoria</code> de piezas de ajedrez (Rey, Peón) — la factoría decide qué tipo de pieza crear según el color y tipo solicitado.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">Ajedrez.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Ajedrez.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-creacional"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-creacional">CREACIONAL</div>
+        <div class="pat-name">Factory Method — Transporte</div>
+        <div class="pat-intent">Variante del Factory Method aplicada a la selección dinámica de medio de transporte al aeropuerto según número de pasajeros y criterios de coste/tiempo.</div>
+        <div class="pat-example">Ejemplo: <code>Transporte::crearTransporte()</code> devuelve Bus, Tren o Taxi según el tipo solicitado. Aplicación real de decisión de transporte óptimo.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">TransporteAeropuerto.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/TransporteAeropuerto.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-creacional"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-creacional">CREACIONAL</div>
+        <div class="pat-name">Factory Method — Clasificador</div>
+        <div class="pat-intent">Factoría que instancia el clasificador adecuado (kNN, Bayes, RandomForest) en función de los datos de entrenamiento, desacoplando el cliente del algoritmo concreto.</div>
+        <div class="pat-example">Ejemplo: <code>Factoria</code> de clasificadores con base de entrenamiento. Aplicación en reconocimiento de patrones e inteligencia artificial.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">principal_kNN.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Clasificacion.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ESTRUCTURALES -->
+  <div id="estructurales" class="cat-header" style="margin-top:2rem;">
+    <span class="cat-tag cat-estructural">Estructurales</span>
+    <span class="cat-title">Composición de clases y objetos</span>
+  </div>
+  <div class="pattern-grid">
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Adapter — Robots</div>
+        <div class="pat-intent">Convierte la interfaz de una clase en otra que el cliente espera. Permite que clases con interfaces incompatibles trabajen juntas sin modificar su código.</div>
+        <div class="pat-example">Ejemplo: adaptador entre <code>RobotWizo</code> (Bluetooth/mover) y <code>RobotDico</code> (WiFi/go) mediante interfaz común <code>IRobot</code>. Caso realista de integración de robots heterogéneos.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">Robots.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Adaptador.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Adapter — Impresora</div>
+        <div class="pat-intent">Segunda variante del Adapter: adapta una impresora antigua (<code>OldPrinter</code>) a la interfaz moderna (<code>Printer</code>) usando composición. Combina con Singleton en la Factoría.</div>
+        <div class="pat-example">Ejemplo: <code>PrinterAdapter</code> envuelve <code>OldPrinter</code> para hacerla compatible con el sistema moderno, sin modificar el código heredado (legacy).</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">printer.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Adapter_printer.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Bridge (Puente)</div>
+        <div class="pat-intent">Desacopla una abstracción de su implementación para que ambas puedan variar independientemente. Evita la explosión de subclases al combinar jerarquías ortogonales.</div>
+        <div class="pat-example">Ejemplo: <code>Circulo</code> (abstracción) desacoplado de <code>DibujandoAPI1/API2</code> (implementación). La forma puede cambiar de API de renderizado sin modificar su lógica.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">Bridge.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Brigde.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Composite</div>
+        <div class="pat-intent">Compone objetos en estructuras de árbol para representar jerarquías parte-todo. Permite tratar objetos individuales y composiciones de forma uniforme.</div>
+        <div class="pat-example">Ejemplo: estructura de árbol con <code>Component</code> y <code>Composite</code>. Cada nodo puede contener otros nodos, modelando sistemas de ficheros, menús o estructuras organizativas.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">Composite.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Composite.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Decorator (Decorador)</div>
+        <div class="pat-intent">Añade responsabilidades adicionales a un objeto dinámicamente. Alternativa flexible a la herencia para extender funcionalidad sin modificar la clase base.</div>
+        <div class="pat-example">Ejemplo: <code>SeatLeon</code> decorado con opciones (GPS, techo solar, pintura metalizada) mediante composición. Calcula precio y descripción acumulando decoradores.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">decorator.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Decorator.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-estructural"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-estructural">ESTRUCTURAL</div>
+        <div class="pat-name">Clases Internas (Inner Classes)</div>
+        <div class="pat-intent">Técnica C++ de clase interna privada que implementa una interfaz pública, exponiendo solo la funcionalidad deseada. Permite conversiones de tipo controladas mediante <code>operator</code>.</div>
+        <div class="pat-example">Ejemplo: <code>NumeroReal</code> con clase interna <code>NotificadorEntero</code> que implementa <code>IEntero</code>. Conversión implícita de <code>float</code> a <code>int</code> con encapsulamiento total.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">NumeroReal.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/clasesInternas.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPORTAMIENTO -->
+  <div id="comportamiento" class="cat-header" style="margin-top:2rem;">
+    <span class="cat-tag cat-comportamiento">Comportamiento</span>
+    <span class="cat-title">Comunicación y responsabilidad entre objetos</span>
+  </div>
+  <div class="pattern-grid">
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">Observer (Observador) — Divisor</div>
+        <div class="pat-intent">Define dependencia uno-a-muchos entre objetos: cuando el sujeto cambia de estado, notifica automáticamente a todos sus observadores. Base del paradigma reactivo.</div>
+        <div class="pat-example">Ejemplo: <code>Subject</code> con valor entero notifica a múltiples <code>Observer</code>, cada uno con un divisor distinto. Muestra qué observadores son divisores del valor actual.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">DivObs.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/DivisorObservador.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">Strategy (Estrategia)</div>
+        <div class="pat-intent">Define una familia de algoritmos, encapsula cada uno y los hace intercambiables. Permite que el algoritmo varíe independientemente de los clientes que lo usan.</div>
+        <div class="pat-example">Ejemplo: <code>GestorCompras</code> con distintas estrategias de cálculo de precio (ordinario, descuento por volumen, IVA reducido), seleccionadas en tiempo de ejecución por la Factoría.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">estr_ofertas.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Estrategia.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">State (Máquina de Estado)</div>
+        <div class="pat-intent">Permite que un objeto altere su comportamiento cuando su estado interno cambia. El objeto parecerá cambiar de clase. Implementa máquinas de estado finitas de forma limpia.</div>
+        <div class="pat-example">Ejemplo: <code>MaquinaEstado</code> con pistón (<code>PistonArriba/Abajo</code>). Las transiciones de estado se gestionan mediante polimorfismo, sin condicionales anidados.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">MaquinaEstado.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/MaquinaEstado.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">Template Method</div>
+        <div class="pat-intent">Define el esqueleto de un algoritmo en una clase base, delegando algunos pasos a las subclases. Permite redefinir ciertos pasos sin cambiar la estructura del algoritmo.</div>
+        <div class="pat-example">Ejemplo: preparación de bebida — <code>Bebida</code> define la secuencia (hervir, elaborar, verter, condimentos). <code>Cafe</code> y <code>Te</code> implementan los pasos específicos de cada bebida.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">template_method.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/TemplateMethod.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">Chain of Responsibility (Cadena de Responsabilidad)</div>
+        <div class="pat-intent">Pasa una petición a través de una cadena de manejadores. Cada manejador decide procesar la petición o pasarla al siguiente. Desacopla emisor y receptor.</div>
+        <div class="pat-example">Ejemplo: cadena de atención al cliente — <code>CentralitaHandler → TecnicoHandler → DirectorHandler</code>. Cada nivel resuelve lo que puede y escala el resto. Incluye versiones v0 y vB de la implementación.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">chain_resp.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/chain.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-comportamiento"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-comportamiento">COMPORTAMIENTO</div>
+        <div class="pat-name">Mediator (Mediador)</div>
+        <div class="pat-intent">Define un objeto que encapsula cómo interactúan otros objetos. Promueve el bajo acoplamiento evitando que los objetos se referencien entre sí directamente.</div>
+        <div class="pat-example">Ejemplo: sala de chat donde los <code>User</code> no se comunican directamente sino a través de un <code>ChatMediator</code>. Modela sistemas de mensajería, salas de control y redes de sensores.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">Mediator.cpp</span>
+          <span class="pat-file ext-zip">CMakeLists.txt</span>
+        </div>
+        <a class="pat-download" href="material/patrones/Mediator.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ARQUITECTURA -->
+  <div id="arquitectura" class="cat-header" style="margin-top:2rem;">
+    <span class="cat-tag cat-arquitectura">Arquitectura</span>
+    <span class="cat-title">Patrones de arquitectura software</span>
+  </div>
+  <div class="pattern-grid">
+
+    <div class="pattern-card">
+      <div class="pat-bar bar-arquitectura"></div>
+      <div class="pat-body">
+        <div class="pat-category cat-text-arquitectura">ARQUITECTURA</div>
+        <div class="pat-name">Observer con arquitectura por eventos</div>
+        <div class="pat-intent">Implementación completa del patrón Observer con interfaces <code>Observable</code> y <code>Observer</code> en ficheros de cabecera separados. Modela una arquitectura reactiva basada en eventos para sistemas de control.</div>
+        <div class="pat-example">Ejemplo: <code>SensorControl</code> que notifica cambios de estado a múltiples observadores mediante clase interna <code>Notifier</code>. Incluye <code>Observer.h</code> y <code>Observable.h</code> reutilizables.</div>
+      </div>
+      <div class="pat-footer">
+        <div class="pat-files">
+          <span class="pat-file ext-zip">arq_capas.cpp</span>
+          <span class="pat-file ext-zip">Observer.h</span>
+        </div>
+        <a class="pat-download" href="material/patrones/arqEventos.zip">⬇ ZIP</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="../index.html">← Volver a Recursos Docentes</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>
