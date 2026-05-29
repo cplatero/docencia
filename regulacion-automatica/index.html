@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulación Automática — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb; --surface: #fffef9; --ink: #1a1a18; --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e; --accent: #c0392b; --accent-light: #f9e8e6;
+    --gold: #b8860b; --border: #d8d4c8;
+    --teoria: #1a3a5c; --teoria-light: #e8f0f8;
+    --practica: #1a5c2a; --practica-light: #e8f5ec;
+    --video: #5c1a5c; --video-light: #f5e8f5;
+    --libro: #8a6000; --libro-light: #fef5e0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+  .header-stripe { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 40%, var(--teoria) 100%); }
+  header { background: var(--ink); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .course-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  h1 { font-family: 'Source Serif 4', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.15; color: #fff; }
+  h1 span { color: var(--gold); }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+  .meta-pill { font-size: 0.78rem; padding: 0.3rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; color: rgba(255,255,255,0.75); font-family: 'JetBrains Mono', monospace; }
+  .header-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #fff; text-align: center; line-height: 1.9; border-radius: 2px; white-space: nowrap; }
+  .header-badge a { color: var(--gold); text-decoration: none; }
+  .intro-band { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start; }
+  .intro-text p { font-size: 1rem; color: var(--ink-soft); margin-bottom: 0.75rem; font-weight: 300; }
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+  .intro-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 3px; }
+  .stat-num { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .nav-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+  .nav-pill { font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 2px; text-decoration: none; font-family: 'JetBrains Mono', monospace; transition: opacity 0.15s; }
+  .nav-pill.t { background: var(--teoria-light); color: var(--teoria); }
+  .nav-pill.p { background: var(--practica-light); color: var(--practica); }
+  .nav-pill.v { background: var(--video-light); color: var(--video); }
+  .nav-pill.b { background: var(--libro-light); color: var(--libro); }
+  .nav-pill:hover { opacity: 0.7; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.3rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .tag-t { background: var(--teoria); }
+  .tag-p { background: var(--practica); }
+  .tag-v { background: var(--video); }
+  .tag-b { background: var(--libro); }
+  .section-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; }
+  .lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .lesson-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .card-header { padding: 1rem 1.1rem 0.75rem; border-left: 3px solid var(--teoria); }
+  .card-header.p { border-left-color: var(--practica); }
+  .card-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .card-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; }
+  .card-desc { font-size: 0.82rem; color: var(--ink-soft); padding: 0 1.1rem 0.75rem; font-weight: 300; }
+  .file-list { padding: 0 0.5rem 0.75rem; }
+  .file-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; border-radius: 3px; text-decoration: none; color: var(--ink-soft); font-size: 0.82rem; transition: background 0.15s; }
+  .file-item:hover { background: var(--bg); color: var(--ink); }
+  .file-icon { font-size: 0.9rem; width: 1.2rem; text-align: center; flex-shrink: 0; }
+  .file-ext { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+  .ext-pdf { background: #fde8e8; color: #c0392b; }
+  .ext-zip { background: #e8eef8; color: #1a3a5c; }
+
+  /* VIDEO CARDS */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.15s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
+  .video-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .video-bar { height: 3px; background: var(--video); }
+  .video-body { padding: 1rem 1.1rem; }
+  .video-type { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--video); margin-bottom: 0.3rem; }
+  .video-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.35rem; }
+  .video-desc { font-size: 0.8rem; color: var(--ink-soft); font-weight: 300; }
+  .video-footer { padding: 0.65rem 1.1rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .video-count { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--ink-faint); }
+  .video-cta { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--video); }
+
+  /* BOOK CARD */
+  .book-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; margin-bottom: 1rem; }
+  .book-icon { font-size: 2rem; flex-shrink: 0; }
+  .book-info h3 { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .book-info p { font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; line-height: 1.6; }
+  .book-isbn { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); margin-top: 0.4rem; }
+  .book-info a { color: var(--teoria); font-size: 0.8rem; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  /* INFO NOTE */
+  .info-note { background: var(--practica-light); border: 1px solid #b8d8c0; border-left: 4px solid var(--practica); border-radius: 4px; padding: 1rem 1.25rem; margin: 1.5rem 0; font-size: 0.85rem; color: var(--ink-soft); }
+  .info-note strong { color: var(--practica); }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+  footer a { color: var(--gold); text-decoration: none; }
+  @media (max-width: 700px) { .header-inner, .intro-inner { grid-template-columns: 1fr; } .lesson-grid, .video-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="breadcrumb"><a href="../index.html">← Recursos Docentes</a> / Regulación Automática</div>
+      <div class="course-label">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI · UPM</div>
+      <h1>Regulación <span>Automática</span></h1>
+      <div class="header-meta">
+        <span class="meta-pill">MATLAB / Simulink</span>
+        <span class="meta-pill">Arduino</span>
+        <span class="meta-pill">14 CAPÍTULOS</span>
+        <span class="meta-pill">4 PRÁCTICAS</span>
+        <span class="meta-pill">Vídeos docentes</span>
+        <span class="meta-pill">CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br><a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Material completo del curso de <strong>Regulación Automática</strong> del Grado en Ingeniería Electrónica Industrial y Automática (ETSIDI-UPM), publicado en acceso abierto.</p>
+      <p>El curso cubre los fundamentos del análisis y diseño de sistemas de control: modelado matemático, análisis en los dominios temporal y frecuencial, estabilidad y diseño de reguladores. Las <strong>prácticas están implementadas con Arduino y MATLAB/Simulink</strong>, diseñadas para realizarse sin instrumentación física de laboratorio, lo que permite el aprendizaje autónomo y el acceso remoto.</p>
+      <p>Se incluyen además <strong>colecciones completas de vídeos</strong> de teoría y prácticas grabados por el autor, disponibles en acceso abierto. El material teórico corresponde al libro <em>"Apuntes de Regulación Automática"</em> (Fundación General UPM, ISBN 978-84-96737-05-1). Licencia: <strong>CC BY-NC-SA 4.0</strong>.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">14</div><div class="stat-label">Capítulos teoría</div></div>
+      <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">Prácticas Arduino</div></div>
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Colec. de vídeos</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Acceso libre</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill t">→ Apuntes teóricos</a>
+    <a href="#practicas" class="nav-pill p">→ Prácticas Arduino</a>
+    <a href="#videos" class="nav-pill v">→ Vídeos docentes</a>
+    <a href="#libro" class="nav-pill b">→ Libro de referencia</a>
+  </div>
+
+  <!-- ═══════════════════════════ TEORÍA -->
+  <div id="teoria" class="section-header">
+    <span class="section-tag tag-t">Teoría</span>
+    <span class="section-title">Apuntes por capítulos</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 01</div>
+        <div class="card-title">Introducción al control de procesos</div>
+      </div>
+      <div class="card-desc">Concepto de sistema de control. Lazo abierto y lazo cerrado. Perturbaciones. Objetivos del control: seguimiento, regulación y estabilidad. Ejemplos industriales y tecnológicos.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/1_IntroControl_v1.8b.pdf"><span class="file-icon">📄</span>cap1 — Introducción al control de procesos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 02</div>
+        <div class="card-title">Revisión de los fundamentos matemáticos</div>
+      </div>
+      <div class="card-desc">Ecuaciones diferenciales lineales con coeficientes constantes. Transformada de Laplace: definición, propiedades y tabla. Función de transferencia. Fracciones parciales e inversión.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/2_RevMatem_v1.8b.pdf"><span class="file-icon">📄</span>cap2 — Revisión de fundamentos matemáticos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 03</div>
+        <div class="card-title">Descripción y representación de sistemas continuos</div>
+      </div>
+      <div class="card-desc">Función de transferencia. Diagramas de bloques: álgebra y reducción. Grafos de flujo de señal (Mason). Representación en espacio de estados. Conversión entre representaciones.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/3_DescpReprCont_v1.8b.pdf"><span class="file-icon">📄</span>cap3 — Descripción y representación de sistemas<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 04</div>
+        <div class="card-title">Modelado matemático de los sistemas dinámicos</div>
+      </div>
+      <div class="card-desc">Modelado de sistemas mecánicos traslacionales y rotacionales, eléctricos, electromecánicos, hidráulicos y térmicos. Linealización alrededor de un punto de operación.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/4_Modelado_v1.8b.pdf"><span class="file-icon">📄</span>cap4 — Modelado matemático de sistemas dinámicos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULOS 05 y 06</div>
+        <div class="card-title">Análisis en el dominio temporal</div>
+      </div>
+      <div class="card-desc">Respuesta transitoria ante señales de prueba (escalón, rampa, impulso). Sistemas de primer y segundo orden: polos, parámetros característicos (ζ, ω_n), sobreoscilación, tiempo de establecimiento y tiempo de pico.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/5_AnaTemp_v1.8b.pdf"><span class="file-icon">📄</span>cap5 — Análisis en el dominio temporal<span class="file-ext ext-pdf">PDF</span></a>
+        <a class="file-item" href="material/teoria/6_AnaTemp_1_2_v1.8b.pdf"><span class="file-icon">📄</span>cap6 — Análisis: sistemas 1.º y 2.º orden<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 07</div>
+        <div class="card-title">Sistemas de orden superior</div>
+      </div>
+      <div class="card-desc">Respuesta temporal de sistemas de orden superior. Polo dominante. Aproximación por sistemas de 1.º y 2.º orden. Ceros y su efecto en la respuesta transitoria. Sistemas con retardo puro.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/7_OrdenSup_v1.8b.pdf"><span class="file-icon">📄</span>cap7 — Sistemas de orden superior<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 08</div>
+        <div class="card-title">Estabilidad absoluta</div>
+      </div>
+      <div class="card-desc">Concepto de estabilidad BIBO. Estabilidad de sistemas lineales: criterio de Routh-Hurwitz. Casos especiales. Estabilidad de sistemas en lazo cerrado a partir de la función de transferencia en lazo abierto.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/8_Estabilidad_v1.8.pdf"><span class="file-icon">📄</span>cap8 — Estabilidad absoluta<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 09</div>
+        <div class="card-title">Respuesta en régimen permanente</div>
+      </div>
+      <div class="card-desc">Error en régimen permanente para distintos tipos de sistemas (tipo 0, 1, 2) y entradas (escalón, rampa, parábola). Constantes de error estático: posición, velocidad y aceleración.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/9_ErrorRegPer_v1.8b.pdf"><span class="file-icon">📄</span>cap9 — Respuesta en régimen permanente<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 10</div>
+        <div class="card-title">Lugar de las Raíces (LDR)</div>
+      </div>
+      <div class="card-desc">Definición y propiedades del Lugar de las Raíces. Reglas de construcción. LDR de ganancia negativa. Diseño de controladores mediante el LDR. Compensadores de adelanto, retraso y adelanto-retraso.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/10_LDR_v1.8b.pdf"><span class="file-icon">📄</span>cap10 — Lugar de las Raíces<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 11</div>
+        <div class="card-title">Análisis en el dominio de la frecuencia</div>
+      </div>
+      <div class="card-desc">Respuesta frecuencial: diagramas de Bode, Nyquist y Nichols. Construcción asintótica de Bode para funciones de transferencia elementales. Respuesta en frecuencia experimental e identificación.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/11_anresfre_v1.8b.pdf"><span class="file-icon">📄</span>cap11 — Análisis en el dominio de la frecuencia<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 12</div>
+        <div class="card-title">Estabilidad en el dominio de la frecuencia</div>
+      </div>
+      <div class="card-desc">Criterio de estabilidad de Nyquist. Margen de fase y margen de ganancia. Relación entre estabilidad relativa y respuesta transitoria. Sistemas con retardo y su análisis frecuencial.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/12_Estab_fr_v1.8b.pdf"><span class="file-icon">📄</span>cap12 — Estabilidad en el dominio de la frecuencia<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 13</div>
+        <div class="card-title">Análisis dinámico en el dominio de la frecuencia</div>
+      </div>
+      <div class="card-desc">Especificaciones en el dominio frecuencial: ancho de banda, pico de resonancia y frecuencia de resonancia. Relación entre especificaciones temporales y frecuenciales. Función de sensibilidad.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/13_AnaFr_v1.3b.pdf"><span class="file-icon">📄</span>cap13 — Análisis dinámico en frecuencia<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 14</div>
+        <div class="card-title">Consideraciones y acciones básicas de control</div>
+      </div>
+      <div class="card-desc">Acciones de control: proporcional (P), integral (I), derivativa (D) y combinaciones (PI, PD, PID). Sintonización de reguladores PID: métodos de Ziegler-Nichols. Consideraciones prácticas de diseño.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/14_Introducci%3Fn%20al%20dise%3Fo_v1.4.pdf"><span class="file-icon">📄</span>cap14 — Acciones básicas de control y reguladores PID<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ PRÁCTICAS -->
+  <div id="practicas" class="section-header">
+    <span class="section-tag tag-p">Prácticas</span>
+    <span class="section-title">Prácticas de laboratorio — Arduino + MATLAB/Simulink</span>
+  </div>
+
+  <div class="info-note">
+    <strong>Sin instrumentación física requerida.</strong> Las prácticas están diseñadas con Arduino y MATLAB/Simulink, lo que permite realizarlas con componentes de muy bajo coste (Arduino + servomotores + LEDs) o de forma completamente simulada. Cada práctica incluye vídeos demostrativos en la colección de prácticas (ver sección Vídeos).
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header p">
+        <div class="card-num">PRÁCTICA 01</div>
+        <div class="card-title">Introducción al laboratorio de Regulación Automática</div>
+      </div>
+      <div class="card-desc">Instalación del entorno MATLAB con toolboxes Control System y Signal Processing. Configuración de Arduino con MATLAB/Simulink (paquete MATLAB Support for Arduino). Primer modelo en Simulink: adquisición de señales y control básico.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr1RA_201008.pdf"><span class="file-icon">📄</span>Guión práctica 1 — Introducción al laboratorio<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header p">
+        <div class="card-num">PRÁCTICA 02</div>
+        <div class="card-title">Diagramas de bloques en Simulink</div>
+      </div>
+      <div class="card-desc">Implementación de diagramas de bloques en MATLAB/Simulink. Álgebra de bloques: serie, paralelo y realimentación. Simulación de sistemas de primer y segundo orden. Análisis de la respuesta ante señales de prueba.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr2RA_201003.pdf"><span class="file-icon">📄</span>Guión práctica 2 — Diagramas de bloques<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header p">
+        <div class="card-num">PRÁCTICA 03</div>
+        <div class="card-title">Análisis en el dominio temporal con Arduino</div>
+      </div>
+      <div class="card-desc">Caracterización experimental de sistemas físicos reales mediante señales de prueba. Identificación de parámetros (constante de tiempo, ganancia, retardo) desde la respuesta al escalón. Verificación con circuito RC real controlado por Arduino.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr3RA_201015.pdf"><span class="file-icon">📄</span>Guión práctica 3 — Análisis en el dominio temporal<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header p">
+        <div class="card-num">PRÁCTICA 04</div>
+        <div class="card-title">Reguladores continuos — Control PID con Arduino</div>
+      </div>
+      <div class="card-desc">Diseño e implementación de reguladores P, PI, PD y PID sobre una planta física real controlada mediante Arduino y MATLAB/Simulink. Sintonización de parámetros PID con el método de Ziegler-Nichols. El alumno puede construir su propio sistema de control (trabajo libre: balancín, seguidor de línea, control de LED, servomotor, etc.).</div>
+      <div class="file-list">
+        <a class="file-item" href="material/practicas/pr4RA_201125.pdf"><span class="file-icon">📄</span>Guión práctica 4 — Reguladores continuos y PID<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ VÍDEOS -->
+  <div id="videos" class="section-header">
+    <span class="section-tag tag-v">Vídeos</span>
+    <span class="section-title">Colecciones de vídeos docentes</span>
+  </div>
+
+  <div class="video-grid">
+
+    <a class="video-card" href="https://drive.upm.es/s/DdHFiIZaIPqrLlr" target="_blank">
+      <div class="video-bar"></div>
+      <div class="video-body">
+        <div class="video-type">Vídeos de teoría</div>
+        <div class="video-title">Teoría de Regulación Automática</div>
+        <div class="video-desc">Colección completa de vídeos de las clases de teoría y problemas, grabados por el profesor. Cubre los 14 capítulos del curso: desde la introducción al control hasta el diseño de reguladores PID. Grabados durante la pandemia COVID-19 y mantenidos como recurso permanente.</div>
+      </div>
+      <div class="video-footer">
+        <span class="video-count">Caps. 1 – 14 · UPM Drive</span>
+        <span class="video-cta">Ver vídeos →</span>
+      </div>
+    </a>
+
+    <a class="video-card" href="https://drive.upm.es/s/ALRLKJK338XCtZY" target="_blank">
+      <div class="video-bar"></div>
+      <div class="video-body">
+        <div class="video-type">Vídeos de prácticas</div>
+        <div class="video-title">Prácticas de Regulación Automática</div>
+        <div class="video-desc">Vídeos demostrativos de las cuatro prácticas de laboratorio con Arduino y MATLAB/Simulink. Incluye la instalación del entorno, el montaje de los circuitos, la implementación en Simulink y la sintonización de los reguladores PID sobre plantas reales de bajo coste.</div>
+      </div>
+      <div class="video-footer">
+        <span class="video-count">Prácticas 1 – 4 · UPM Drive</span>
+        <span class="video-cta">Ver vídeos →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ═══════════════════════════ LIBRO -->
+  <div id="libro" class="section-header">
+    <span class="section-tag tag-b">Libro</span>
+    <span class="section-title">Libros de referencia del curso</span>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📘</div>
+    <div class="book-info">
+      <h3>Apuntes de Regulación Automática</h3>
+      <p>Carlos Platero Dueñas · Fundación General de la Universidad Politécnica de Madrid, 2006 · 304 páginas.</p>
+      <p style="margin-top:0.4rem;">Libro de texto original que cubre los 14 capítulos del curso. Ha sido la base bibliográfica de la asignatura durante más de 15 años. Los capítulos individuales en su versión actualizada están disponibles en esta página.</p>
+      <div class="book-isbn">ISBN: 978-84-96737-05-1 &nbsp;·&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📗</div>
+    <div class="book-info">
+      <h3>Apuntes de Regulación Automática II / Servosistemas</h3>
+      <p>Carlos Platero Dueñas, Miguel Hernando Gutiérrez · Fundación General UPM, 2005 · 300 páginas.</p>
+      <p style="margin-top:0.4rem;">Continuación del primer libro: análisis avanzado, control en espacio de estados, sistemas discretos y servosistemas de posición y velocidad.</p>
+      <div class="book-isbn">ISBN: 978-84-96244-72-6 &nbsp;·&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📙</div>
+    <div class="book-info">
+      <h3>Prácticas de Regulación Automática</h3>
+      <p>Carlos Platero Dueñas, Manuel Ferre Pérez · Fundación General UPM, 2006 · 228 páginas.</p>
+      <p style="margin-top:0.4rem;">Libro de prácticas original basado en el control de temperatura de una célula Peltier (laboratorio presencial). Las prácticas actuales, renovadas durante la pandemia, emplean Arduino y MATLAB/Simulink y están disponibles en esta página.</p>
+      <div class="book-isbn">ISBN: 978-84-96737-04-4 &nbsp;·&nbsp; </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="../index.html">← Volver a Recursos Docentes</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>

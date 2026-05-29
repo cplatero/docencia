@@ -15,15 +15,44 @@ Escuela Técnica Superior de Ingeniería y Diseño Industrial (ETSIDI) · UPM
 | Curso | Titulación | Estado |
 |-------|-----------|--------|
 | [Procesado de Señales e Imágenes](procesado-senales-imagenes/) | Máster en Ingeniería de Producción | ✅ Disponible |
-| Visión Artificial | Máster en Ingeniería de Producción | 🔜 Próximamente |
-| Procesado de Señales e Imágenes Biomédicas | Máster en Ingeniería Biomédica | 🔜 Próximamente |
+| [Visión Artificial](vision-artificial/) | Máster en Ingeniería de Producción | ✅ Disponible |
 
 ### Grado
 | Curso | Titulación | Estado |
 |-------|-----------|--------|
-| Regulación Automática | Grado en Ingeniería Electrónica Industrial y Automática | 🔜 Próximamente |
-| Sistemas Informáticos Industriales | Grado en Ingeniería Electrónica Industrial y Automática | 🔜 Próximamente |
-| Automática y Robótica | Grado en Ingeniería Electrónica Industrial y Automática | 🔜 Próximamente |
+| [Regulación Automática](regulacion-automatica/) | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
+| [Sistemas Informáticos Industriales](sistemas-informaticos-industriales/) | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
+| Automática | Grado en Ingeniería Electrónica Industrial y Automática | 🔜 Próximamente |
+
+---
+
+## 📖 Descripción de los cursos
+
+### Procesado de Señales e Imágenes
+Bases ortogonales, wavelets, optimización numérica, problema inverso variacional y disperso, contornos activos, registro de imágenes médicas y segmentación por cortes en grafos. 6 lecciones + 6 prácticas MATLAB.
+
+### Visión Artificial
+Formación de imágenes, modelos de cámara, procesamiento digital, preprocesado, segmentación (Otsu, Hough), morfología matemática e interpretación automática. Calibración métrica de cámaras. 7 capítulos + 6 prácticas MATLAB.
+
+### Regulación Automática
+Modelado matemático, análisis temporal y frecuencial, estabilidad (Routh, Nyquist), régimen permanente, Lugar de las Raíces y diseño de reguladores PID. Prácticas con **Arduino + MATLAB/Simulink** realizables sin instrumentación física. Colecciones de vídeos de teoría y prácticas. 14 capítulos + 4 prácticas.
+
+### Sistemas Informáticos Industriales
+Ingeniería del software orientada a objetos con UML y Proceso Unificado. 17 patrones de diseño GoF (creacionales, estructurales y de comportamiento) implementados en **C++ con CMakeLists.txt** listos para compilar. 6 capítulos + 17 ejemplos de código.
+
+---
+
+## 📚 Libros de texto
+
+Todos los cursos están respaldados por libros de texto originales publicados por la Fundación General UPM (verificables en el [Registro Nacional ISBN](https://www.culturaydeporte.gob.es/webISBN/)):
+
+| Libro | Año | ISBN |
+|-------|-----|------|
+| Apuntes de Regulación Automática | 2006 | 978-84-96737-05-1 |
+| Apuntes de Regulación Automática II / Servosistemas | 2005 | 978-84-96244-72-6 |
+| Prácticas de Regulación Automática | 2006 | 978-84-96737-04-4 |
+| Apuntes de Visión Artificial | 2007 | 978-84-96737-16-7 |
+| Apuntes de Informática Industrial: ADOO | 2007 | 978-84-96737-15-0 |
 
 ---
 
@@ -39,14 +68,27 @@ Citar como: *Platero Dueñas, C. Recursos Docentes en Acceso Abierto. ETSIDI-UPM
 
 ```
 docencia/
-├── index.html                           ← página índice de todos los cursos
+├── index.html                                ← página índice de todos los cursos
 ├── README.md
-├── procesado-senales-imagenes/          ← Procesado de Señales e Imágenes (Máster)
+├── procesado-senales-imagenes/               ← Procesado de Señales e Imágenes (Máster)
 │   ├── index.html
 │   └── material/
 │       ├── teoria/cap1 … cap6/
 │       └── practicas/pr1 … pr6/
-├── regulacion-automatica/               ← (próximamente)
-├── vision-artificial/                   ← (próximamente)
-└── ...
+├── vision-artificial/                        ← Visión Artificial (Máster + Grado)
+│   ├── index.html
+│   └── material/
+│       ├── teoria/                           ← 7 capítulos PDF
+│       └── practicas/pr1 … pr6/
+├── regulacion-automatica/                    ← Regulación Automática (Grado)
+│   ├── index.html
+│   └── material/
+│       ├── teoria/                           ← 14 capítulos PDF
+│       └── practicas/                        ← 4 prácticas Arduino+MATLAB
+├── sistemas-informaticos-industriales/       ← SII (Grado)
+│   ├── index.html
+│   └── material/
+│       ├── teoria/                           ← 6 capítulos PDF
+│       └── patrones/                         ← 17 ZIPs C++ con CMake
+└── automatica/                               ← (próximamente)
 ```
