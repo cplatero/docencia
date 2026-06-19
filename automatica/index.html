@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automática — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb; --surface: #fffef9; --ink: #1a1a18; --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e; --accent: #c0392b; --accent-light: #f9e8e6;
+    --gold: #b8860b; --border: #d8d4c8;
+    --teoria: #1a3a5c; --teoria-light: #e8f0f8;
+    --practica: #1a5c2a; --practica-light: #e8f5ec;
+    --video: #5c1a5c; --video-light: #f5e8f5;
+    --libro: #8a6000; --libro-light: #fef5e0;
+    --examen: #7a3b12; --examen-light: #fbe9dc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+  .header-stripe { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 40%, var(--teoria) 100%); }
+  header { background: var(--ink); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .course-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  h1 { font-family: 'Source Serif 4', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.15; color: #fff; }
+  h1 span { color: var(--gold); }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+  .meta-pill { font-size: 0.78rem; padding: 0.3rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; color: rgba(255,255,255,0.75); font-family: 'JetBrains Mono', monospace; }
+  .header-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #fff; text-align: center; line-height: 1.9; border-radius: 2px; white-space: nowrap; }
+  .header-badge a { color: var(--gold); text-decoration: none; }
+  .intro-band { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start; }
+  .intro-text p { font-size: 1rem; color: var(--ink-soft); margin-bottom: 0.75rem; font-weight: 300; }
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+  .intro-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 3px; }
+  .stat-num { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .nav-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+  .nav-pill { font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 2px; text-decoration: none; font-family: 'JetBrains Mono', monospace; transition: opacity 0.15s; }
+  .nav-pill.t { background: var(--teoria-light); color: var(--teoria); }
+  .nav-pill.v { background: var(--video-light); color: var(--video); }
+  .nav-pill.e { background: var(--examen-light); color: var(--examen); }
+  .nav-pill.b { background: var(--libro-light); color: var(--libro); }
+  .nav-pill:hover { opacity: 0.7; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.3rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .tag-t { background: var(--teoria); }
+  .tag-v { background: var(--video); }
+  .tag-e { background: var(--examen); }
+  .tag-b { background: var(--libro); }
+  .section-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; }
+  .section-note { font-size: 0.82rem; color: var(--ink-faint); margin-left: auto; font-style: italic; }
+  .lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .lesson-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .card-header { padding: 1rem 1.1rem 0.75rem; border-left: 3px solid var(--teoria); }
+  .card-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .card-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; }
+  .card-desc { font-size: 0.82rem; color: var(--ink-soft); padding: 0 1.1rem 0.75rem; font-weight: 300; }
+  .file-list { padding: 0 0.5rem 0.75rem; }
+  .file-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; border-radius: 3px; text-decoration: none; color: var(--ink-soft); font-size: 0.82rem; transition: background 0.15s; }
+  .file-item:hover { background: var(--bg); color: var(--ink); }
+  .file-icon { font-size: 0.9rem; width: 1.2rem; text-align: center; flex-shrink: 0; }
+  .file-ext { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+  .ext-pdf { background: #fde8e8; color: #c0392b; }
+
+  /* VIDEO CARDS */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: box-shadow 0.15s, transform 0.15s; text-decoration: none; color: inherit; display: block; }
+  .video-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .video-bar { height: 3px; background: var(--video); }
+  .video-body { padding: 1rem 1.1rem; }
+  .video-type { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--video); margin-bottom: 0.3rem; }
+  .video-title { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.35rem; }
+  .video-desc { font-size: 0.8rem; color: var(--ink-soft); font-weight: 300; }
+  .video-footer { padding: 0.65rem 1.1rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .video-count { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--ink-faint); }
+  .video-cta { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--video); }
+
+  /* BOOK CARD */
+  .book-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; margin-bottom: 1rem; }
+  .book-icon { font-size: 2rem; flex-shrink: 0; }
+  .book-info h3 { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .book-info p { font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; line-height: 1.6; }
+  .book-isbn { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); margin-top: 0.4rem; }
+
+  /* EXAM TABLE */
+  .exam-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  table.exam-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.exam-table thead { background: var(--examen); }
+  table.exam-table thead th { color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: left; padding: 0.65rem 1rem; font-weight: 600; }
+  table.exam-table tbody tr { border-bottom: 1px solid var(--border); }
+  table.exam-table tbody tr:hover { background: var(--examen-light); }
+  table.exam-table td { padding: 0.55rem 1rem; color: var(--ink-soft); vertical-align: middle; }
+  td.exam-year { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--ink); }
+  .exam-link { padding: 0.2rem 0.5rem; display: inline-flex; }
+  .exam-link .file-ext { background: #fde8e8; color: #c0392b; }
+
+  /* INFO NOTE */
+  .info-note { background: var(--practica-light); border: 1px solid #b8d8c0; border-left: 4px solid var(--practica); border-radius: 4px; padding: 1rem 1.25rem; margin: 1.5rem 0; font-size: 0.85rem; color: var(--ink-soft); }
+  .info-note strong { color: var(--practica); }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+  footer a { color: var(--gold); text-decoration: none; }
+  @media (max-width: 700px) {
+    .header-inner, .intro-inner { grid-template-columns: 1fr; }
+    .lesson-grid, .video-grid { grid-template-columns: 1fr; }
+    table.exam-table { font-size: 0.75rem; }
+    table.exam-table td, table.exam-table th { padding: 0.45rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="breadcrumb"><a href="../index.html">← Recursos Docentes</a> / Automática</div>
+      <div class="course-label">Grado en Ingeniería Electrónica Industrial y Automática · ETSIDI · UPM</div>
+      <h1>Auto<span>mática</span></h1>
+      <div class="header-meta">
+        <span class="meta-pill">CONTROL</span>
+        <span class="meta-pill">AUTOMATISMOS</span>
+        <span class="meta-pill">PLC</span>
+        <span class="meta-pill">2 CAPÍTULOS</span>
+        <span class="meta-pill">45 EXÁMENES RESUELTOS</span>
+        <span class="meta-pill">CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br><a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Material de la asignatura de <strong>Automática</strong>, publicado en acceso abierto. El curso ofrece una introducción a los conceptos básicos del control automático de procesos y a los automatismos industriales.</p>
+      <p>Los apuntes abarcan la <strong>introducción al control de procesos</strong> (lazo abierto y cerrado, perturbaciones, objetivos del control) y una <strong>introducción a los automatismos</strong>: control todo-nada, autómatas programables (PLC), tecnología cableada y programada, y nociones de neumática industrial.</p>
+      <p>Se incluye además un <strong>vídeo de clase</strong> con el desarrollo de los temas de la asignatura y un amplio <strong>banco de exámenes resueltos</strong> de convocatorias entre 2013 y 2026, correspondientes a los distintos grados y grupos en los que se imparte la asignatura. El material teórico corresponde a los libros <em>"Apuntes de Regulación Automática"</em> y <em>"Apuntes de Regulación Automática II / Servosistemas"</em> (Fundación General UPM). Licencia: <strong>CC BY-NC-SA 4.0</strong>.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Capítulos teoría</div></div>
+      <div class="stat-box"><div class="stat-num">45</div><div class="stat-label">Exámenes resueltos</div></div>
+      <div class="stat-box"><div class="stat-num">1</div><div class="stat-label">Vídeo de clase</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Acceso libre</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill t">→ Apuntes teóricos</a>
+    <a href="#videos" class="nav-pill v">→ Vídeo de clase</a>
+    <a href="#examenes" class="nav-pill e">→ Exámenes resueltos</a>
+    <a href="#libro" class="nav-pill b">→ Libros de referencia</a>
+  </div>
+
+  <!-- ═══════════════════════════ TEORÍA -->
+  <div id="teoria" class="section-header">
+    <span class="section-tag tag-t">Teoría</span>
+    <span class="section-title">Apuntes por capítulos</span>
+  </div>
+
+  <div class="lesson-grid">
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 01</div>
+        <div class="card-title">Introducción al control de procesos</div>
+      </div>
+      <div class="card-desc">Concepto de sistema de control. Lazo abierto y lazo cerrado. Perturbaciones. Objetivos del control: seguimiento, regulación y estabilidad. Ejemplos industriales y tecnológicos.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/1_IntroControl_v1.7.pdf"><span class="file-icon">📄</span>cap1 — Introducción al control de procesos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="card-header">
+        <div class="card-num">CAPÍTULO 08</div>
+        <div class="card-title">Introducción a los automatismos</div>
+      </div>
+      <div class="card-desc">Control todo-nada. Parte operativa y parte de control. Tecnología cableada y tecnología programada. Autómatas programables (PLC): arquitectura y programación. Nociones de neumática industrial y sus componentes.</div>
+      <div class="file-list">
+        <a class="file-item" href="material/teoria/8_IntroAutomatismos.pdf"><span class="file-icon">📄</span>cap8 — Introducción a los automatismos<span class="file-ext ext-pdf">PDF</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ VÍDEOS -->
+  <div id="videos" class="section-header">
+    <span class="section-tag tag-v">Vídeos</span>
+    <span class="section-title">Vídeo de clase de los temas de la asignatura</span>
+  </div>
+
+  <div class="video-grid">
+
+    <a class="video-card" href="https://drive.upm.es/s/N1rbvqonVFGcJ1f" target="_blank">
+      <div class="video-bar"></div>
+      <div class="video-body">
+        <div class="video-type">Vídeo de teoría</div>
+        <div class="video-title">Clases de Automática</div>
+        <div class="video-desc">Vídeo con el desarrollo de las clases de los temas de la asignatura, grabado por el profesor y disponible en acceso abierto.</div>
+      </div>
+      <div class="video-footer">
+        <span class="video-count">UPM Drive</span>
+        <span class="video-cta">Ver vídeo →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ═══════════════════════════ EXÁMENES -->
+  <div id="examenes" class="section-header">
+    <span class="section-tag tag-e">Exámenes</span>
+    <span class="section-title">Exámenes resueltos</span>
+    <span class="section-note">45 convocatorias · 2013–2026</span>
+  </div>
+
+  <div class="info-note">
+    <strong>Nota:</strong> colección de exámenes resueltos correspondientes a las distintas convocatorias y grupos (Mecánica, Eléctrica, ECA, A204, A207, M301, entre otros) en los que se ha impartido la asignatura desde 2013. Ordenados por curso académico, de más reciente a más antiguo.
+  </div>
+
+  <div class="exam-table-wrap">
+    <table class="exam-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Convocatoria</th>
+          <th>Grupo / Aula</th>
+          <th>Solución</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="exam-year">2026</td>
+          <td>Marzo</td>
+          <td>M301 (temprano)</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_auto_Marzo26_M301_Temp.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2026</td>
+          <td>Marzo</td>
+          <td>1ª parcial — Br / A207</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_Auto_1P_marzo26_Br_A207.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2026</td>
+          <td>Marzo</td>
+          <td>1ª parcial — MP / A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_Auto_1P_marzo26_MP_A204.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2025</td>
+          <td>Abril</td>
+          <td>1ª parcial — Ll / M301</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_Auto_1P_abril25_ll_M301.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2025</td>
+          <td>Abril</td>
+          <td>1ª parcial — MP / A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_Auto_1P_abril25_MP_A204.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2025</td>
+          <td>Abril</td>
+          <td>1ª parcial — Ll / A207</td>
+          <td><a class="file-item exam-link" href="material/examenes/sol_Auto_1P_abril25_Ll_A207.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2024</td>
+          <td>Abril</td>
+          <td>1ª parcial</td>
+          <td><a class="file-item exam-link" href="material/examenes/sol_Auto_1P_abril24.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2023</td>
+          <td>Marzo</td>
+          <td>1ª parcial</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_auto_1P_marz23.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2023</td>
+          <td>Marzo</td>
+          <td>Grupo Barrera</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_auto_Barrera_marz23.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2023</td>
+          <td>Marzo</td>
+          <td>Convocatoria de depósito</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_auto_Marzo23_deposito.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Marzo</td>
+          <td>A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoA204Marzo22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Marzo</td>
+          <td>A207</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoA207Marzo22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Marzo</td>
+          <td>E208</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoE208Marzo22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Marzo</td>
+          <td>M301</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoM301Marzo22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Marzo</td>
+          <td>M306 / Q308</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoM306Q308Marzo22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2022</td>
+          <td>Abril</td>
+          <td>E205</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoE205Abril22.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2019</td>
+          <td>Marzo</td>
+          <td>A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoA204Marzo19.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2019</td>
+          <td>Marzo</td>
+          <td>M301</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoM301Marzo19.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2019</td>
+          <td>Mayo</td>
+          <td>A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoA204Mayo19.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2019</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoMecMayo19.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2018</td>
+          <td>Marzo</td>
+          <td>A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoA204Marzo18.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2018</td>
+          <td>Abril</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecAbril18.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2018</td>
+          <td>Mayo</td>
+          <td>ECA</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoEcaMayo18.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2018</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMayo18.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2017</td>
+          <td>Marzo</td>
+          <td>1ª parcial — A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/resp1A204_marzo17.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2017</td>
+          <td>Marzo</td>
+          <td>1ª parcial — Mec301 (parte 1)</td>
+          <td><a class="file-item exam-link" href="material/examenes/resp1Mec301_marzo17_1.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2017</td>
+          <td>Marzo</td>
+          <td>1ª parcial — Mec301 (parte 2)</td>
+          <td><a class="file-item exam-link" href="material/examenes/resp1Mec301_marzo17_2.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2017</td>
+          <td>Mayo</td>
+          <td>A204</td>
+          <td><a class="file-item exam-link" href="material/examenes/resol_mayo17A204.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2017</td>
+          <td>Mayo</td>
+          <td>M301</td>
+          <td><a class="file-item exam-link" href="material/examenes/resol_mayo17M301.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2016</td>
+          <td>Marzo</td>
+          <td>ECA</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoEcaMarzo16.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2016</td>
+          <td>Marzo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMarzo16.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2016</td>
+          <td>Mayo</td>
+          <td>ECA</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoEcaMayo16.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2016</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoMecMayo16.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2015</td>
+          <td>Marzo</td>
+          <td>ECA</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoEcaMarzo15.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2015</td>
+          <td>Marzo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMarzo15.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2015</td>
+          <td>Mayo</td>
+          <td>ECA</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoEcaMayo15.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2015</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMayo15.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2014</td>
+          <td>Marzo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/Res_autoMecMarzo14.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2014</td>
+          <td>Marzo</td>
+          <td>Eléctrica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoElecMarzo14.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2014</td>
+          <td>Mayo</td>
+          <td>Eléctrica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoElecMayo14.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2014</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMayo14.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2013</td>
+          <td>Marzo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoMecMarzo13.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2013</td>
+          <td>Marzo</td>
+          <td>Eléctrica</td>
+          <td><a class="file-item exam-link" href="material/examenes/res_autoElecMarzo13.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2013</td>
+          <td>Mayo</td>
+          <td>Eléctrica</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoElecMayo13.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+        <tr>
+          <td class="exam-year">2013</td>
+          <td>Mayo</td>
+          <td>Mecánica</td>
+          <td><a class="file-item exam-link" href="material/examenes/resAutoMecMayo13.pdf"><span class="file-icon">📄</span>Ver solución<span class="file-ext ext-pdf">PDF</span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════ LIBRO -->
+  <div id="libro" class="section-header">
+    <span class="section-tag tag-b">Libro</span>
+    <span class="section-title">Libros de referencia del curso</span>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📘</div>
+    <div class="book-info">
+      <h3>Apuntes de Regulación Automática</h3>
+      <p>Carlos Platero Dueñas · Fundación General de la Universidad Politécnica de Madrid, 2006 · 304 páginas.</p>
+      <p style="margin-top:0.4rem;">Libro base del capítulo 1 — introducción al control de procesos.</p>
+      <div class="book-isbn">ISBN: 978-84-96737-05-1</div>
+    </div>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📗</div>
+    <div class="book-info">
+      <h3>Apuntes de Regulación Automática II / Servosistemas</h3>
+      <p>Carlos Platero Dueñas, Miguel Hernando Gutiérrez · Fundación General UPM, 2005 · 300 páginas.</p>
+      <p style="margin-top:0.4rem;">Libro base del capítulo 8 — introducción a los automatismos, PLC y neumática industrial.</p>
+      <div class="book-isbn">ISBN: 978-84-96244-72-6</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="../index.html">← Volver a Recursos Docentes</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>

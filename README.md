@@ -22,7 +22,7 @@ Escuela Técnica Superior de Ingeniería y Diseño Industrial (ETSIDI) · UPM
 |-------|-----------|--------|
 | [Regulación Automática](regulacion-automatica/) | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
 | [Sistemas Informáticos Industriales](sistemas-informaticos-industriales/) | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
-| Automática | Grado en Ingeniería Electrónica Industrial y Automática | 🔜 Próximamente |
+| Automática | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
 
 ---
 
@@ -39,6 +39,9 @@ Modelado matemático, análisis temporal y frecuencial, estabilidad (Routh, Nyqu
 
 ### Sistemas Informáticos Industriales
 Ingeniería del software orientada a objetos con UML y Proceso Unificado. 17 patrones de diseño GoF (creacionales, estructurales y de comportamiento) implementados en **C++ con CMakeLists.txt** listos para compilar. 6 capítulos + 17 ejemplos de código.
+
+### Automática
+Introducción al control de procesos (lazo abierto/cerrado, objetivos del control) y a los automatismos industriales: control todo-nada, PLC, tecnología cableada y programada, neumática. Incluye vídeo de clase y un banco de **45 exámenes resueltos** de convocatorias 2013–2026. 2 capítulos + vídeo + exámenes.
 
 ---
 
@@ -90,5 +93,9 @@ docencia/
 │   └── material/
 │       ├── teoria/                           ← 6 capítulos PDF
 │       └── patrones/                         ← 17 ZIPs C++ con CMake
-└── automatica/                               ← (próximamente)
+└── automatica/                               ← Automática (Grado)
+    ├── index.html
+    └── material/
+        ├── teoria/                           ← 2 capítulos PDF
+        └── examenes/                         ← 45 exámenes resueltos PDF
 ```
