@@ -24,6 +24,11 @@ Escuela Técnica Superior de Ingeniería y Diseño Industrial (ETSIDI) · UPM
 | [Sistemas Informáticos Industriales](sistemas-informaticos-industriales/) | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
 | Automática | Grado en Ingeniería Electrónica Industrial y Automática | ✅ Disponible |
 
+### Plan 71
+| Curso | Titulación | Estado |
+|-------|-----------|--------|
+| [Electrónica Industrial (Analógica)](electronica-analogica-plan71/) | Ingeniería Técnica Industrial (Plan 71) | ✅ Disponible |
+
 ---
 
 ## 📖 Descripción de los cursos
@@ -42,6 +47,9 @@ Ingeniería del software orientada a objetos con UML y Proceso Unificado. 17 pat
 
 ### Automática
 Introducción al control de procesos (lazo abierto/cerrado, objetivos del control) y a los automatismos industriales: control todo-nada, PLC, tecnología cableada y programada, neumática. Incluye vídeo de clase y un banco de **45 exámenes resueltos** de convocatorias 2013–2026. 2 capítulos + vídeo + exámenes.
+
+### Electrónica Industrial (Analógica)
+Asignatura del antiguo **Plan 71** de Ingeniería Técnica Industrial (EUITI-UPM), parte Analógica de Electrónica Industrial. Tres parciales: Electrónica Analógica (amplificadores, realimentación, A.O.), Electrónica de Instrumentación (adquisición y tratamiento de señal) y Electrónica de Potencia (rectificadores, reguladores de CC, inversores). 17 capítulos + apuntes + colección de problemas + **34 exámenes resueltos** de los cursos 1996/97 a 2001/02.
 
 ---
 
@@ -93,9 +101,13 @@ docencia/
 │   └── material/
 │       ├── teoria/                           ← 6 capítulos PDF
 │       └── patrones/                         ← 17 ZIPs C++ con CMake
-└── automatica/                               ← Automática (Grado)
+├── automatica/                               ← Automática (Grado)
     ├── index.html
     └── material/
         ├── teoria/                           ← 2 capítulos PDF
         └── examenes/                         ← 45 exámenes resueltos PDF
+└── electronica-analogica-plan71/             ← Electrónica Industrial (Analógica) (Plan 71)
+    ├── index.html
+    └── material/
+        └── examenes/                         ← 34 exámenes resueltos PDF
 ```

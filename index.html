@@ -22,6 +22,8 @@
     --grado-light: #e8f5ec;
     --seminario: #5c3a1a;
     --seminario-light: #f5ede8;
+    --plan71: #6b3fa0;
+    --plan71-light: #ede5f5;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,6 +229,7 @@
   .tag-master    { background: var(--master); }
   .tag-grado     { background: var(--grado); }
   .tag-seminario { background: var(--seminario); }
+  .tag-plan71    { background: var(--plan71); }
 
   .section-title {
     font-family: 'Source Serif 4', serif;
@@ -268,6 +271,7 @@
 
   .card-accent-bar.grado     { background: var(--grado); }
   .card-accent-bar.seminario { background: var(--seminario); }
+  .card-accent-bar.plan71    { background: var(--plan71); }
 
   .card-body {
     padding: 1.25rem 1.35rem 1rem;
@@ -345,6 +349,7 @@
 
   .card-cta.grado     { color: var(--grado); }
   .card-cta.seminario { color: var(--seminario); }
+  .card-cta.plan71    { color: var(--plan71); }
 
   /* COMING SOON CARD */
   .course-card.coming {
@@ -461,7 +466,7 @@
 <div class="stats-bar">
   <div class="stats-inner">
     <div class="stat-item">
-      <span class="stat-n">5</span>
+      <span class="stat-n">6</span>
       <span class="stat-l">Cursos</span>
     </div>
     <div class="stat-sep"></div>
@@ -631,6 +636,43 @@
           <span class="card-stat">45 exámenes</span>
         </div>
         <span class="card-cta grado">Ver curso →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ═══════════ PLAN 71 -->
+  <div class="section-hd">
+    <span class="section-tag tag-plan71">Plan 71</span>
+    <span class="section-title">Asignaturas de Ingeniería Técnica Industrial (Plan 71)</span>
+  </div>
+
+  <div class="course-grid">
+
+    <!-- Electrónica Industrial (Analógica) — ACTIVO -->
+    <a href="electronica-analogica-plan71/index.html" class="course-card">
+      <div class="card-accent-bar plan71"></div>
+      <div class="card-body">
+        <div class="card-meta">Ingeniería Técnica Industrial · Plan 71 · EUITI/ETSIDI-UPM</div>
+        <div class="card-title">Electrónica Industrial (Analógica)</div>
+        <div class="card-desc">
+          Amplificadores de pequeña señal, realimentación y amplificadores operacionales;
+          instrumentación electrónica y tratamiento de señal; electrónica de potencia
+          (rectificadores, reguladores de CC, inversores).
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag-pill">Analógica</span>
+        <span class="tag-pill">Instrumentación</span>
+        <span class="tag-pill">Electrónica de Potencia</span>
+        <span class="tag-pill">Exámenes</span>
+      </div>
+      <div class="card-footer">
+        <div class="card-stats">
+          <span class="card-stat">17 capítulos</span>
+          <span class="card-stat">34 exámenes</span>
+        </div>
+        <span class="card-cta plan71">Ver curso →</span>
       </div>
     </a>
 

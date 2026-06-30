@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrónica Industrial (Analógica) — UPM</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb; --surface: #fffef9; --ink: #1a1a18; --ink-soft: #4a4a44;
+    --ink-faint: #8a8a7e; --accent: #c0392b; --accent-light: #f9e8e6;
+    --gold: #b8860b; --border: #d8d4c8;
+    --teoria: #6b3fa0; --teoria-light: #ede5f5;
+    --practica: #1a5c2a; --practica-light: #e8f5ec;
+    --video: #5c1a5c; --video-light: #f5e8f5;
+    --libro: #8a6000; --libro-light: #fef5e0;
+    --examen: #7a3b12; --examen-light: #fbe9dc;
+    --temario: #1a3a5c; --temario-light: #e8f0f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+  .header-stripe { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 40%, var(--teoria) 100%); }
+  header { background: var(--ink); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .course-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  h1 { font-family: 'Source Serif 4', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.15; color: #fff; }
+  h1 span { color: var(--gold); }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+  .meta-pill { font-size: 0.78rem; padding: 0.3rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; color: rgba(255,255,255,0.75); font-family: 'JetBrains Mono', monospace; }
+  .header-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #fff; text-align: center; line-height: 1.9; border-radius: 2px; white-space: nowrap; }
+  .header-badge a { color: var(--gold); text-decoration: none; }
+  .intro-band { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .intro-inner { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start; }
+  .intro-text p { font-size: 1rem; color: var(--ink-soft); margin-bottom: 0.75rem; font-weight: 300; }
+  .intro-text strong { color: var(--ink); font-weight: 500; }
+  .intro-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1rem; border-radius: 3px; }
+  .stat-num { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+  .nav-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; }
+  .nav-pill { font-size: 0.78rem; padding: 0.35rem 0.85rem; border-radius: 2px; text-decoration: none; font-family: 'JetBrains Mono', monospace; transition: opacity 0.15s; }
+  .nav-pill.b { background: var(--libro-light); color: var(--libro); }
+  .nav-pill.p { background: var(--temario-light); color: var(--temario); }
+  .nav-pill.e { background: var(--examen-light); color: var(--examen); }
+  .nav-pill:hover { opacity: 0.7; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.3rem 0.6rem; border-radius: 2px; color: #fff; text-transform: uppercase; }
+  .tag-b { background: var(--libro); }
+  .tag-p { background: var(--temario); }
+  .tag-e { background: var(--examen); }
+  .section-title { font-family: 'Source Serif 4', serif; font-size: 1.35rem; font-weight: 600; }
+  .section-note { font-size: 0.82rem; color: var(--ink-faint); margin-left: auto; font-style: italic; }
+
+  /* BOOK CARD */
+  .book-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; margin-bottom: 1rem; }
+  .book-icon { font-size: 2rem; flex-shrink: 0; }
+  .book-info h3 { font-family: 'Source Serif 4', serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .book-info p { font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; line-height: 1.6; }
+  .book-link { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--libro); margin-top: 0.5rem; display: inline-block; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  /* TEMARIO (PROGRAMA) */
+  .parcial-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1.25rem; overflow: hidden; }
+  .parcial-head { background: var(--temario-light); padding: 0.75rem 1.25rem; border-left: 4px solid var(--temario); font-family: 'Source Serif 4', serif; font-weight: 600; font-size: 1.02rem; color: var(--temario); }
+  .capitulo { padding: 0.85rem 1.25rem; border-top: 1px solid var(--border); }
+  .capitulo-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+  .capitulo-title { font-weight: 500; font-size: 0.92rem; color: var(--ink); margin-bottom: 0.25rem; }
+  .capitulo-desc { font-size: 0.82rem; color: var(--ink-soft); font-weight: 300; line-height: 1.55; }
+
+  /* EXAM TABLE */
+  .exam-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  table.exam-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.exam-table thead { background: var(--examen); }
+  table.exam-table thead th { color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: left; padding: 0.65rem 1rem; font-weight: 600; }
+  table.exam-table tbody tr { border-bottom: 1px solid var(--border); }
+  table.exam-table tbody tr:hover { background: var(--examen-light); }
+  table.exam-table td { padding: 0.55rem 1rem; color: var(--ink-soft); vertical-align: middle; }
+  td.exam-year { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--ink); }
+  .exam-link { padding: 0.2rem 0.5rem; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; color: var(--ink-soft); }
+  .exam-link:hover { color: var(--ink); }
+  .file-icon { font-size: 0.9rem; }
+  .file-ext { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.1rem 0.3rem; border-radius: 2px; background: #fde8e8; color: #c0392b; }
+
+  /* INFO NOTE */
+  .info-note { background: var(--practica-light); border: 1px solid #b8d8c0; border-left: 4px solid var(--practica); border-radius: 4px; padding: 1rem 1.25rem; margin: 1.5rem 0; font-size: 0.85rem; color: var(--ink-soft); }
+  .info-note strong { color: var(--practica); }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+  footer a { color: var(--gold); text-decoration: none; }
+  @media (max-width: 700px) {
+    .header-inner, .intro-inner { grid-template-columns: 1fr; }
+    table.exam-table { font-size: 0.75rem; }
+    table.exam-table td, table.exam-table th { padding: 0.45rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="breadcrumb"><a href="../index.html">← Recursos Docentes</a> / Electrónica Industrial (Analógica)</div>
+      <div class="course-label">Ingeniería Técnica Industrial · Plan 71 · EUITI / ETSIDI · UPM</div>
+      <h1>Electrónica Industrial<br><span>(Analógica)</span></h1>
+      <div class="header-meta">
+        <span class="meta-pill">PLAN 71</span>
+        <span class="meta-pill">ELECTRÓNICA ANALÓGICA</span>
+        <span class="meta-pill">INSTRUMENTACIÓN</span>
+        <span class="meta-pill">ELECTRÓNICA DE POTENCIA</span>
+        <span class="meta-pill">17 CAPÍTULOS</span>
+        <span class="meta-pill">CC BY-NC-SA 4.0</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      Prof. Carlos Platero Dueñas<br>
+      Dep. Ingeniería Eléctrica,<br>Electrónica, Automática<br>y Física Aplicada<br>
+      <br><a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    </div>
+  </div>
+</header>
+
+<div class="intro-band">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <p>Material de la asignatura <strong>Electrónica Industrial (parte Analógica)</strong>, correspondiente al antiguo <strong>Plan de Estudios 71</strong> de Ingeniería Técnica Industrial, impartida en la Escuela Universitaria de Ingeniería Técnica Industrial de Madrid (EUITI, hoy ETSIDI-UPM). La asignatura se estructuraba en tres partes independientes —Digital, Microprocesadores y Analógica— siendo esta última la que recoge el presente curso.</p>
+      <p>El temario se distribuye en <strong>tres parciales</strong>: Electrónica Analógica (amplificadores de pequeña señal, realimentación, amplificadores operacionales), Electrónica de Instrumentación (aplicaciones del A.O., sistemas de adquisición y tratamiento de señal, introducción al procesamiento digital de señales) y Electrónica de Potencia (semiconductores, rectificadores, reguladores de CC, control de CA e inversores).</p>
+      <p>Se incluyen los <strong>apuntes de la asignatura</strong> y una <strong>colección de problemas</strong>, ambos depositados en el Archivo Digital UPM, junto con un amplio <strong>banco de exámenes resueltos</strong> de convocatorias de los cursos 1996/97 a 2001/02. Licencia: <strong>CC BY-NC-SA 4.0</strong>.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Parciales</div></div>
+      <div class="stat-box"><div class="stat-num">17</div><div class="stat-label">Capítulos</div></div>
+      <div class="stat-box"><div class="stat-num">34</div><div class="stat-label">Exámenes resueltos</div></div>
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Cursos académicos</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="nav-pills">
+    <a href="#libro" class="nav-pill b">→ Apuntes y problemas</a>
+    <a href="#temario" class="nav-pill p">→ Temario (programa)</a>
+    <a href="#examenes" class="nav-pill e">→ Exámenes resueltos</a>
+  </div>
+
+  <!-- ═══════════════════════════ LIBRO / APUNTES -->
+  <div id="libro" class="section-header">
+    <span class="section-tag tag-b">Material</span>
+    <span class="section-title">Apuntes y colección de problemas</span>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📘</div>
+    <div class="book-info">
+      <h3>Apuntes de Electrónica Analógica</h3>
+      <p>Carlos Platero Dueñas, E. Blanco · Servicio de Publicaciones de la EUITI, 1994. Libro de texto base de la asignatura, depositado en acceso abierto en el Archivo Digital UPM.</p>
+      <a class="book-link" href="https://oa.upm.es/96759/" target="_blank">↗ oa.upm.es/96759</a>
+    </div>
+  </div>
+
+  <div class="book-card">
+    <div class="book-icon">📗</div>
+    <div class="book-info">
+      <h3>76 Problemas de Electrónica Analógica</h3>
+      <p>Carlos Platero Dueñas · Servicio de Publicaciones de la EUITI, 1996. Colección de problemas resueltos que complementa los apuntes, depositada en acceso abierto en el Archivo Digital UPM.</p>
+      <a class="book-link" href="https://oa.upm.es/96760/" target="_blank">↗ oa.upm.es/96760</a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ TEMARIO -->
+  <div id="temario" class="section-header">
+    <span class="section-tag tag-p">Temario</span>
+    <span class="section-title">Programa de la asignatura</span>
+    <span class="section-note">Curso 1999/2000 · 3 parciales · 17 capítulos</span>
+  </div>
+
+  <div class="parcial-block">
+    <div class="parcial-head">PARCIAL I — Electrónica Analógica</div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 1</div>
+      <div class="capitulo-title">Amplificadores de pequeña señal y a frecuencias medias</div>
+      <div class="capitulo-desc">Modelos del transistor. Parámetros de un amplificador lineal transistorizado. Amplificador en emisor común, en colector común y en base común a frecuencias medias. Comparación de las tres configuraciones. La recta de carga y la recta dinámica.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 2</div>
+      <div class="capitulo-title">Respuesta en frecuencia de amplificadores de pequeña señal</div>
+      <div class="capitulo-desc">Comportamiento del amplificador en frecuencia. Análisis en el dominio de la frecuencia. Influencia de los condensadores de acoplo y de paso en emisor común. Influencia de la capacidad parasitaria en el amplificador de emisor común. Amplificador multietapa. Respuesta de los amplificadores ante cualquier tipo de excitación.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 3</div>
+      <div class="capitulo-title">Amplificadores de potencia</div>
+      <div class="capitulo-desc">Introducción. Parámetros de los amplificadores de potencia. Clasificación de los amplificadores de potencia. Amplificadores de clase A. Amplificadores de clase B.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 4</div>
+      <div class="capitulo-title">Teoría general de la realimentación</div>
+      <div class="capitulo-desc">Conceptos y tipos de realimentación. El amplificador con realimentación ideal. Realimentación negativa. Estabilidad.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 5</div>
+      <div class="capitulo-title">Amplificadores con realimentación negativa</div>
+      <div class="capitulo-desc">Generalidades. Amplificador realimentado tensión/serie. Introducción al análisis de amplificadores realimentados.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 6</div>
+      <div class="capitulo-title">Amplificadores operacionales</div>
+      <div class="capitulo-desc">Amplificador operacional básico. Esquemas básicos con amplificadores operacionales. El diagrama de bloques del amplificador operacional. El amplificador diferencial. Estructura del amplificador operacional simplificada. Errores de continua. Estabilidad de un amplificador operacional. Técnicas de compensación en frecuencia. Respuesta en frecuencia con montajes lineales.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 7</div>
+      <div class="capitulo-title">Simulación de circuitos por ordenador</div>
+      <div class="capitulo-desc">Introducción. La simulación de circuitos electrónicos. El simulador PSPICE.</div>
+    </div>
+  </div>
+
+  <div class="parcial-block">
+    <div class="parcial-head">PARCIAL II — Electrónica de Instrumentación</div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 8</div>
+      <div class="capitulo-title">Aplicaciones de los amplificadores operacionales</div>
+      <div class="capitulo-desc">Aplicaciones lineales. Osciladores. Aplicaciones no lineales.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 9</div>
+      <div class="capitulo-title">Introducción a los sistemas electrónicos para el control</div>
+      <div class="capitulo-desc">Introducción a la Electrónica de Regulación y Control. Dispositivos de consigna. Dispositivos de medida. Errores. Perturbaciones sobre los equipos de regulación y control.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 10</div>
+      <div class="capitulo-title">Sistemas de adquisición y accionamiento</div>
+      <div class="capitulo-desc">Introducción. Sistemas de adquisición de datos. Estructura de un sistema de accionamiento. Tipos de convertidores A/D y especificaciones. Tipos de convertidores D/A y especificaciones.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 11</div>
+      <div class="capitulo-title">Tratamiento de señales analógicas</div>
+      <div class="capitulo-desc">Estructura generalizada con amplificadores operacionales. Diseño de funciones de transferencia simples. Bloques analógicos de regulación. Filtros activos y pasivos. Bloques constituyentes de un filtro activo. Aproximaciones polinómicas de un filtro. Transformación en frecuencia. Implementación de filtros de segundo orden. Filtros de orden n.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 12</div>
+      <div class="capitulo-title">Introducción al procesamiento digital de señales</div>
+      <div class="capitulo-desc">Conceptos básicos sobre sistemas discretos. Filtros digitales. Diseño de filtros no recursivos (FIR). Diseño de filtros recursivos (IIR). Implementación de los filtros digitales. Efecto de la cuantificación en los filtros.</div>
+    </div>
+  </div>
+
+  <div class="parcial-block">
+    <div class="parcial-head">PARCIAL III — Electrónica de Potencia</div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 13</div>
+      <div class="capitulo-title">Semiconductores de Electrónica de Potencia</div>
+      <div class="capitulo-desc">Estado de la técnica. Diodos. SCR. GTO. TRIAC. BJT. MOSFET. IGBT. Protecciones de semiconductores. Componentes para el disparo y el control.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 14</div>
+      <div class="capitulo-title">Rectificadores</div>
+      <div class="capitulo-desc">Generalidades. Rectificación polifásica de media onda. Rectificación polifásica de doble onda. Rectificadores polifásicos con carga inductiva. Efecto de la inductancia de dispersión del transformador. Rectificación controlada.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 15</div>
+      <div class="capitulo-title">Reguladores de Corriente Continua (CC)</div>
+      <div class="capitulo-desc">Generalidades. Fuentes de alimentación lineales. Fuentes de alimentación conmutadas. Convertidores sin aislamiento. Convertidores con aislamiento. Filtros para fuentes de alimentación.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 16</div>
+      <div class="capitulo-title">Control de potencia alterna (CA)</div>
+      <div class="capitulo-desc">Generalidades. Control de fase o por recorte de onda. Control de potencia alterna trifásica. Interruptores estáticos de alterna.</div>
+    </div>
+    <div class="capitulo">
+      <div class="capitulo-num">CAPÍTULO 17</div>
+      <div class="capitulo-title">Inversores</div>
+      <div class="capitulo-desc">Generalidades. Inversores con transistores. Inversores con SCR.</div>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <strong>Evaluación:</strong> tres parciales; para aprobar por parciales era necesario sumar 15 o más puntos, con 3 o más puntos en cada parte. Los exámenes finales de junio, septiembre y febrero incluían todo el temario de la asignatura, aprobándose con 5 puntos. La nota se formaba en un 80% por las pruebas teóricas y un 20% por las experimentales.
+  </div>
+
+  <!-- ═══════════════════════════ EXÁMENES -->
+  <div id="examenes" class="section-header">
+    <span class="section-tag tag-e">Exámenes</span>
+    <span class="section-title">Exámenes resueltos</span>
+    <span class="section-note">Cursos 1996/97 — 2001/02</span>
+  </div>
+
+  <div class="info-note">
+    <strong>Nota:</strong> colección de exámenes de parciales y de convocatorias finales (febrero, junio/julio y septiembre) de la asignatura Electrónica Industrial (Analógica), Plan 71, ordenados por curso académico de más antiguo a más reciente.
+  </div>
+
+  <div class="exam-table-wrap">
+    <table class="exam-table">
+      <thead>
+        <tr><th>Curso</th><th>Convocatoria</th><th>Examen</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="exam-year">1996/97</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/ana_p197.pdf"><span class="file-icon">📄</span>Parcial I<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1996/97</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/ana_p297.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1996/97</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap3_97.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1996/97</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/ana_feb97.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1996/97</td><td>Junio</td><td><a class="exam-link" href="material/examenes/ana_jun97.pdf"><span class="file-icon">📄</span>Final Junio<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1996/97</td><td>Septiembre</td><td><a class="exam-link" href="material/examenes/ana_sep97.pdf"><span class="file-icon">📄</span>Final Septiembre<span class="file-ext">PDF</span></a></td></tr>
+
+        <tr><td class="exam-year">1997/98</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap1_98.pdf"><span class="file-icon">📄</span>Parcial I<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1997/98</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap2_98.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1997/98</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap3_98.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1997/98</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/ana_feb98.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1997/98</td><td>Junio</td><td><a class="exam-link" href="material/examenes/ana_jun98.pdf"><span class="file-icon">📄</span>Final Junio<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1997/98</td><td>Septiembre</td><td><a class="exam-link" href="material/examenes/ana_sep98.pdf"><span class="file-icon">📄</span>Final Septiembre<span class="file-ext">PDF</span></a></td></tr>
+
+        <tr><td class="exam-year">1998/99</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap29899.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1998/99</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap39899.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1998/99</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/anafeb9899.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1998/99</td><td>Junio</td><td><a class="exam-link" href="material/examenes/anafj9899.pdf"><span class="file-icon">📄</span>Final Junio<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1998/99</td><td>Septiembre</td><td><a class="exam-link" href="material/examenes/anafsep99.pdf"><span class="file-icon">📄</span>Final Septiembre<span class="file-ext">PDF</span></a></td></tr>
+
+        <tr><td class="exam-year">1999/00</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap19900.pdf"><span class="file-icon">📄</span>Parcial I<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1999/00</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anaiipar9900.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1999/00</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap39900.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1999/00</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/anaffeb9900.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1999/00</td><td>Junio</td><td><a class="exam-link" href="material/examenes/anafj9900.pdf"><span class="file-icon">📄</span>Final Junio<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">1999/00</td><td>Septiembre</td><td><a class="exam-link" href="material/examenes/anafsep9900.pdf"><span class="file-icon">📄</span>Final Septiembre<span class="file-ext">PDF</span></a></td></tr>
+
+        <tr><td class="exam-year">2000/01</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap1_0001.pdf"><span class="file-icon">📄</span>Parcial I<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2000/01</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anapii0001.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2000/01</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anapiii0001.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2000/01</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/anaffeb0001.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2000/01</td><td>Junio</td><td><a class="exam-link" href="material/examenes/anafj0001sol.pdf"><span class="file-icon">📄</span>Final Junio (con solución)<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2000/01</td><td>Septiembre</td><td><a class="exam-link" href="material/examenes/anafsep01.pdf"><span class="file-icon">📄</span>Final Septiembre<span class="file-ext">PDF</span></a></td></tr>
+
+        <tr><td class="exam-year">2001/02</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap10102.pdf"><span class="file-icon">📄</span>Parcial I<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2001/02</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/ana_p2_0102.pdf"><span class="file-icon">📄</span>Parcial II<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2001/02</td><td>Parciales</td><td><a class="exam-link" href="material/examenes/anap30102.pdf"><span class="file-icon">📄</span>Parcial III<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2001/02</td><td>Febrero</td><td><a class="exam-link" href="material/examenes/ana_ffeb0102.pdf"><span class="file-icon">📄</span>Final Febrero<span class="file-ext">PDF</span></a></td></tr>
+        <tr><td class="exam-year">2001/02</td><td>Julio</td><td><a class="exam-link" href="material/examenes/anafjulio0102.pdf"><span class="file-icon">📄</span>Final Julio<span class="file-ext">PDF</span></a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <p>Carlos Platero Dueñas · Dep. de Ingeniería Eléctrica, Electrónica, Automática y Física Aplicada · ETSIDI-UPM</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://blogs.upm.es/carlos-platero">blogs.upm.es/carlos-platero</a>
+    &nbsp;·&nbsp;
+    <a href="../index.html">← Volver a Recursos Docentes</a>
+    &nbsp;·&nbsp; CC BY-NC-SA 4.0
+  </p>
+</footer>
+
+</body>
+</html>
